@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevSmart - 智能体管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2563eb", 
+                        "primary-hover": "#1d4ed8",
+                        "app-bg": "#0b0e14",      // Deep dark background from reference
+                        "sidebar-bg": "#0b0e14", // Sidebar background
+                        "card-bg": "#151b2b",    // Panel/Card background
+                        "card-hover": "#1c2438",
+                        "border-dark": "#273142", // Subtle borders
+                        "text-main": "#e2e8f0",
+                        "text-muted": "#94a3b8",
+                        "accent-blue": "#3b82f6",
+                        "accent-purple": "#8b5cf6",
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans SC"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0e14; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #273142; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6; 
+        }.toggle-checkbox:checked {
+            right: 0;
+            border-color: #3b82f6;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-app-bg text-text-main h-screen flex overflow-hidden antialiased selection:bg-primary selection:text-white">
+<aside class="w-64 flex-shrink-0 bg-sidebar-bg border-r border-border-dark flex flex-col z-20">
+<div class="h-16 flex items-center px-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white">
+<span class="material-icons-outlined text-xl">deployed_code</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-lg leading-tight tracking-tight text-white">DevSmart</span>
+<span class="text-[10px] text-slate-500 font-medium tracking-wider">AI 研发系统</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-colors group" href="#">
+<span class="material-icons-outlined text-[22px] group-hover:text-primary transition-colors">grid_view</span>
+            任务控制台
+        </a>
+<a class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-colors group" href="#">
+<span class="material-icons-outlined text-[22px] group-hover:text-primary transition-colors">folder_open</span>
+            项目管理
+        </a>
+<a class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg bg-primary text-white shadow-lg shadow-blue-900/20" href="#">
+<span class="material-icons-outlined text-[22px]">smart_toy</span>
+            智能体
+        </a>
+<a class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-colors group" href="#">
+<span class="material-icons-outlined text-[22px] group-hover:text-primary transition-colors">menu_book</span>
+            知识库
+        </a>
+<a class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-colors group" href="#">
+<span class="material-icons-outlined text-[22px] group-hover:text-primary transition-colors">terminal</span>
+            日志记录
+        </a>
+</nav>
+<div class="p-4 border-t border-border-dark">
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-outlined text-[22px]">settings</span>
+            系统设置
+        </a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden relative bg-app-bg">
+<header class="h-16 bg-app-bg border-b border-border-dark flex items-center justify-between px-6 flex-shrink-0">
+<div class="flex-1 max-w-xl">
+<div class="relative group">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 group-focus-within:text-primary transition-colors">
+<span class="material-icons-outlined text-xl">search</span>
+</span>
+<input class="pl-10 block w-full rounded-md border-0 bg-[#151b2b] text-sm text-white placeholder-slate-500 focus:ring-1 focus:ring-primary focus:bg-[#1c2438] transition-colors py-2" placeholder="搜索项目、日志或智能体..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<button class="text-slate-400 hover:text-white transition-colors relative">
+<span class="material-icons-outlined text-xl">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-app-bg"></span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-icons-outlined text-xl">help_outline</span>
+</button>
+<div class="h-6 w-px bg-border-dark mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer">
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-slate-600" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChuqK9MlblW0C7bZfHAo91eMpVnGhww8OE7P9w-F39J0Jk6_28GeUedjI9kDxjaGvjH1IME1l7rCM4hZCTzEdoDnGeSi9jlRcRFRkQVKlPQGvjxJYhsaXpCC4PGAyG694JSXHFojkJoe7hljiQZZ6CNwN_2nwSN8nxAdoeH6hCjqz_dh5W7vTv4QaK1xZs-GCEM0_Hbbnq93w-xIU40n7CiqWJekW_qTXwo492QZ7UryTAP73BGxYmsO9d759pJPQDEkv7wEByVok"/>
+<span class="text-sm font-medium text-white hidden md:block">Sarah Jen 博士</span>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-6 lg:p-8">
+<div class="max-w-7xl mx-auto space-y-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-2xl font-bold text-white tracking-tight">智能体管理</h1>
+<p class="text-slate-400 text-sm mt-1">系统概览与自主智能体活动监控</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-[#1c2438] hover:bg-[#252f48] border border-border-dark text-slate-300 px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-icons-outlined text-sm">filter_list</span>
+                        筛选
+                    </button>
+<button class="bg-primary hover:bg-primary-hover text-white px-4 py-1.5 rounded text-sm font-medium shadow-lg shadow-blue-500/20 flex items-center gap-2 transition-colors">
+<span class="material-icons-outlined text-sm">add</span>
+                        新建智能体
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<div class="bg-card-bg rounded-xl p-5 border border-border-dark relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-outlined text-6xl text-blue-500">groups</span>
+</div>
+<p class="text-sm font-medium text-slate-400">智能体总数</p>
+<div class="mt-2 flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-white">12</h3>
+<span class="text-xs text-green-400 flex items-center font-medium">+2 本周新增</span>
+</div>
+<div class="w-full bg-slate-800 h-1 mt-4 rounded-full overflow-hidden">
+<div class="bg-blue-500 h-1 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="bg-card-bg rounded-xl p-5 border border-border-dark relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-outlined text-6xl text-green-500">bolt</span>
+</div>
+<p class="text-sm font-medium text-slate-400">运行中</p>
+<div class="mt-2 flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-white">8</h3>
+<span class="text-xs text-slate-500">4 个空闲</span>
+</div>
+<div class="flex gap-1 mt-4">
+<div class="flex-1 bg-green-500 h-1 rounded-full"></div>
+<div class="flex-1 bg-green-500 h-1 rounded-full"></div>
+<div class="flex-1 bg-green-500 h-1 rounded-full"></div>
+<div class="flex-1 bg-slate-700 h-1 rounded-full"></div>
+</div>
+</div>
+<div class="bg-card-bg rounded-xl p-5 border border-border-dark relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-outlined text-6xl text-red-500">error_outline</span>
+</div>
+<p class="text-sm font-medium text-slate-400">异常状态</p>
+<div class="mt-2 flex items-baseline gap-2">
+<h3 class="text-3xl font-bold text-white">1</h3>
+<span class="text-xs text-red-400 font-medium">需要关注</span>
+</div>
+<div class="w-full bg-slate-800 h-1 mt-4 rounded-full overflow-hidden">
+<div class="bg-red-500 h-1 rounded-full" style="width: 20%"></div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    智能体实时监控
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+<div class="bg-card-bg rounded-lg border border-border-dark p-6 hover:border-primary/50 transition-all duration-300 relative group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+<span class="material-icons-outlined">assignment</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">需求分析专家</h3>
+<p class="text-[10px] text-slate-500 font-mono mt-0.5 uppercase tracking-wide">PM_AGENT_V2</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+</div>
+</div>
+<p class="text-xs text-slate-400 mb-6 leading-relaxed line-clamp-2 h-8">
+                            负责与用户进行需求对话，提取核心功能点，并自动生成标准化的 PRD 文档。
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-3">
+<label class="flex items-center cursor-pointer relative" for="toggle-pm">
+<input checked="" class="sr-only peer" id="toggle-pm" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="text-xs text-slate-500">自动运行</span>
+</div>
+<div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="日志">
+<span class="material-icons-outlined text-sm">history</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="配置">
+<span class="material-icons-outlined text-sm">settings</span>
+</button>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500/0 via-indigo-500/50 to-indigo-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="bg-card-bg rounded-lg border border-border-dark p-6 hover:border-primary/50 transition-all duration-300 relative group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400">
+<span class="material-icons-outlined">brush</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">UI 原型设计师</h3>
+<p class="text-[10px] text-slate-500 font-mono mt-0.5 uppercase tracking-wide">PROTO_GEN_X1</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-slate-600"></span>
+</div>
+</div>
+<p class="text-xs text-slate-400 mb-6 leading-relaxed line-clamp-2 h-8">
+                            基于 PRD 描述自动生成低保真线框图和 UI 布局代码。集成 Material Design 规范。
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-3">
+<label class="flex items-center cursor-pointer relative" for="toggle-ui">
+<input class="sr-only peer" id="toggle-ui" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="text-xs text-slate-500">已暂停</span>
+</div>
+<div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="日志">
+<span class="material-icons-outlined text-sm">history</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="配置">
+<span class="material-icons-outlined text-sm">settings</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-card-bg rounded-lg border border-red-900/40 p-6 hover:border-red-500/40 transition-all duration-300 relative group shadow-[0_0_15px_rgba(239,68,68,0.05)]">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+<span class="material-icons-outlined">bug_report</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">测试工程师</h3>
+<p class="text-[10px] text-slate-500 font-mono mt-0.5 uppercase tracking-wide">QA_AUTO_BOT</p>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-red-500/10 px-2 py-0.5 rounded text-[10px] text-red-400 border border-red-500/20">
+<span class="material-icons-outlined text-[10px] mr-1">warning</span>
+                                异常
+                            </div>
+</div>
+<p class="text-xs text-slate-400 mb-6 leading-relaxed line-clamp-2 h-8">
+                            自动分析功能逻辑，生成单元测试用例。
+                            <span class="text-red-400 block mt-1 font-mono text-[10px]">Error: Timeout (API: 500)</span>
+</p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-3">
+<label class="flex items-center cursor-pointer relative" for="toggle-qa">
+<input checked="" class="sr-only peer" id="toggle-qa" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<button class="text-xs text-red-400 hover:text-red-300 underline flex items-center gap-1">
+<span class="material-icons-outlined text-[10px]">restart_alt</span> 重启
+                                </button>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="日志">
+<span class="material-icons-outlined text-sm">history</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="配置">
+<span class="material-icons-outlined text-sm">settings</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-card-bg rounded-lg border border-border-dark p-6 hover:border-primary/50 transition-all duration-300 relative group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+<span class="material-icons-outlined">security</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">代码审计专家</h3>
+<p class="text-[10px] text-slate-500 font-mono mt-0.5 uppercase tracking-wide">SEC_AUDIT_PRO</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+</div>
+</div>
+<p class="text-xs text-slate-400 mb-6 leading-relaxed line-clamp-2 h-8">
+                            实时扫描代码库，检测潜在的安全漏洞和代码规范问题，并提供修复建议。
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-3">
+<label class="flex items-center cursor-pointer relative" for="toggle-sec">
+<input checked="" class="sr-only peer" id="toggle-sec" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="text-xs text-slate-500">自动运行</span>
+</div>
+<div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="日志">
+<span class="material-icons-outlined text-sm">history</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="配置">
+<span class="material-icons-outlined text-sm">settings</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-card-bg rounded-lg border border-border-dark p-6 hover:border-primary/50 transition-all duration-300 relative group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+<span class="material-icons-outlined">account_tree</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-base">架构设计师</h3>
+<p class="text-[10px] text-slate-500 font-mono mt-0.5 uppercase tracking-wide">ARCH_MASTER</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-slate-600"></span>
+</div>
+</div>
+<p class="text-xs text-slate-400 mb-6 leading-relaxed line-clamp-2 h-8">
+                            根据需求规模和非功能性要求，推荐系统技术栈和微服务拆分方案。
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-3">
+<label class="flex items-center cursor-pointer relative" for="toggle-arch">
+<input class="sr-only peer" id="toggle-arch" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="text-xs text-slate-500">已暂停</span>
+</div>
+<div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="日志">
+<span class="material-icons-outlined text-sm">history</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded transition-colors" title="配置">
+<span class="material-icons-outlined text-sm">settings</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-[#151b2b]/50 rounded-lg border-2 border-dashed border-slate-700 hover:border-slate-500 hover:bg-[#151b2b] flex flex-col items-center justify-center p-6 cursor-pointer transition-all duration-300 group min-h-[220px]">
+<div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 mb-3 group-hover:bg-primary group-hover:text-white transition-colors group-hover:scale-110 duration-200">
+<span class="material-icons-outlined text-2xl">add</span>
+</div>
+<h3 class="font-bold text-slate-300 group-hover:text-white text-base">部署新智能体</h3>
+<p class="text-xs text-slate-500 mt-1 text-center max-w-[200px]">从模板市场选择或自定义配置 LangGraph 流程</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevSmart - 新功能开发工作流</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1313ec",
+                        "primary-hover": "#0f0fb8",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101022",
+                        "surface-dark": "#16161f",
+                        "surface-input": "#1c1c27",
+                        "border-dark": "#282839",
+                        "accent": "#6366f1",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "Noto Sans SC", "sans-serif"],
+                        "mono": ["monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glowing-orb {
+            box-shadow: 0 0 20px rgba(19, 19, 236, 0.4);
+            animation: pulse-glow 3s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px rgba(19, 19, 236, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(19, 19, 236, 0.6); }
+            100% { box-shadow: 0 0 15px rgba(19, 19, 236, 0.3); }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1c1c27; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3b3b54; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4b4b64; 
+        }
+        .typing-indicator span {
+            animation: blink 1.4s infinite both;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            20% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-body overflow-x-hidden min-h-screen flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-border-dark px-10 py-4 bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-white shadow-[0_0_15px_rgba(19,19,236,0.5)]">
+<span class="material-symbols-outlined">deployed_code</span>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-display">DevSmart</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">仪表盘</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">项目</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">团队</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">设置</a>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-border-dark cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="用户头像" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpehXYxPIBasxCTBKXyCaXGzdS5LYm0txf6kqfGpcJHSEiRBtbBrQ1KMa_HqjbqbbwNFUJ6O7BGkKdbvGI9dNRpDZEu_ZUUrnsa2l8HakisUJxoU0WN1BMFZOWnvHzfAULgBZp6fgKYoOBGlTrzwT7G23Y-NsjYwTqEzrJKthHy1ZH9LosQfpQww0z0wymCq-iNMnZb-MUYvA4QU56JLK_83Cm5XSINyYYf5dCF0Xn7OiB0MzzaXyDuEPYbSX2YWYMI0WkJ2ycTCA");'></div>
+</div>
+</header>
+<main class="flex-1 flex flex-col lg:flex-row max-w-[1600px] w-full mx-auto">
+<div class="flex-1 flex flex-col p-6 lg:p-10 lg:pr-6 border-r border-border-dark/50">
+<div class="flex flex-nowrap items-center gap-2 md:gap-4 mb-10 w-full max-w-5xl overflow-x-auto pb-2 scrollbar-hide">
+<div class="flex items-center gap-3 flex-shrink-0">
+<div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary text-sm font-bold border border-primary/50 z-10">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="text-gray-300 text-sm font-bold tracking-wide whitespace-nowrap">需求描述</span>
+</div>
+<div class="flex-1 min-w-[40px] h-[2px] bg-border-dark relative">
+<div class="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-primary/50 to-primary"></div>
+</div>
+<div class="flex items-center gap-3 flex-shrink-0">
+<div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold shadow-[0_0_10px_rgba(19,19,236,0.5)] z-10">
+                        2
+                        <div class="absolute inset-0 rounded-full border border-white/20 animate-pulse"></div>
+</div>
+<span class="text-white text-sm font-bold tracking-wide whitespace-nowrap">智能澄清</span>
+</div>
+<div class="flex-1 min-w-[40px] h-[2px] bg-border-dark"></div>
+<div class="flex items-center gap-3 opacity-40 flex-shrink-0">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-input border border-border-dark text-gray-400 text-sm font-bold">3</div>
+<span class="text-gray-400 text-sm font-medium whitespace-nowrap">PRD 生成</span>
+</div>
+<div class="flex-1 min-w-[40px] h-[2px] bg-border-dark"></div>
+<div class="flex items-center gap-3 opacity-40 flex-shrink-0">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-input border border-border-dark text-gray-400 text-sm font-bold">4</div>
+<span class="text-gray-400 text-sm font-medium whitespace-nowrap">测试设计</span>
+</div>
+</div>
+<div class="mb-6">
+<h1 class="text-3xl md:text-4xl font-display font-medium text-white mb-3 tracking-tight">新功能开发工作流</h1>
+<p class="text-gray-400 text-base max-w-4xl leading-relaxed">
+                    描述您的功能构想，PM Agent 会分析需求并提出关键澄清问题。确认细节后，系统将自动生成 PRD 初稿。
+                </p>
+</div>
+<div class="bg-gradient-to-br from-surface-dark to-[#1a1a24] rounded-xl border border-border-dark p-6 mb-8 flex items-start gap-6 shadow-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-primary">smart_toy</span>
+</div>
+<div class="relative flex-shrink-0">
+<div class="w-16 h-16 rounded-full bg-surface-input flex items-center justify-center border border-primary/30 glowing-orb relative z-10 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-purple-500/20 z-0"></div>
+<span class="material-symbols-outlined text-primary text-4xl z-10">smart_toy</span>
+</div>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-amber-500 rounded-full border-[3px] border-surface-dark z-20 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></div>
+</div>
+<div class="flex-1 pt-1 z-10">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-3">
+<h3 class="text-lg font-bold text-white tracking-wide">PM Agent</h3>
+<span class="flex items-center gap-1.5 bg-amber-500/10 text-amber-400 text-[10px] px-2.5 py-1 rounded-full border border-amber-500/20 uppercase tracking-wider font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                等待回复
+                            </span>
+</div>
+</div>
+<p class="text-gray-300 text-sm leading-relaxed">
+                        我已经初步分析了您的需求。为了确保生成的 PRD 准确可行，我发现了 <strong class="text-white">2 个</strong> 需要进一步澄清的关键点。请在下方补充信息。
+                    </p>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<div class="flex-1 flex flex-col group/terminal relative opacity-80 hover:opacity-100 transition-opacity">
+<label class="block mb-3 text-sm font-semibold text-gray-300 flex items-center justify-between">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                            需求详细描述
+                        </span>
+<button class="text-xs text-primary hover:text-white transition-colors">编辑原始内容</button>
+</label>
+<div class="relative flex-1 flex flex-col bg-surface-input border border-border-dark rounded-xl overflow-hidden shadow-lg">
+<div class="flex items-center justify-between px-4 py-2 bg-[#15151e] border-b border-border-dark">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-xs text-gray-500 font-mono">
+<span class="material-symbols-outlined text-[16px]">terminal</span>
+<span>INPUT_STREAM</span>
+</div>
+</div>
+</div>
+<textarea class="w-full h-[180px] bg-[#121218] border-none focus:ring-0 p-6 text-base leading-relaxed text-gray-400 resize-none font-mono custom-scrollbar focus:text-white transition-colors" placeholder="请详细描述新功能...">我需要为现有的订单系统添加一个“批量导出”功能。
+1. 用户可以在订单列表页选择多个订单。
+2. 点击“导出”按钮后，弹出一个模态框选择导出格式（CSV/Excel）。
+3. 导出过程应在后台异步进行，完成后通过通知中心提醒用户下载。</textarea>
+<div class="p-2 bg-[#15151e] border-t border-border-dark flex justify-end">
+<button class="px-4 py-1.5 rounded text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-colors">
+                                更新并重新分析
+                             </button>
+</div>
+</div>
+</div>
+<div class="flex justify-center -my-2 relative z-10">
+<div class="bg-surface-dark border border-primary/30 rounded-full p-1.5 text-primary shadow-lg animate-bounce">
+<span class="material-symbols-outlined text-xl block">arrow_downward</span>
+</div>
+</div>
+<div class="bg-[#13131f] rounded-xl border border-primary/40 p-1 shadow-[0_0_40px_rgba(19,19,236,0.1)]">
+<div class="bg-gradient-to-b from-[#1a1a26] to-[#16161f] rounded-lg p-6 lg:p-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-400">help</span>
+                                待确认事项 (2)
+                            </h3>
+<div class="flex items-center gap-2 text-xs text-primary font-mono bg-primary/10 px-3 py-1 rounded border border-primary/20">
+<span class="typing-indicator flex gap-1"><span>.</span><span>.</span><span>.</span></span>
+                                Agent Online
+                            </div>
+</div>
+<div class="space-y-6">
+<div class="group">
+<div class="flex gap-4 mb-3">
+<div class="w-8 h-8 rounded bg-primary/20 flex items-center justify-center flex-shrink-0 text-primary font-bold text-sm border border-primary/30 mt-0.5">Q1</div>
+<div class="flex-1">
+<p class="text-gray-200 text-sm leading-relaxed font-medium">关于导出文件的存储策略：是否需要保留历史导出记录？如果保留，过期时间是多少？</p>
+<p class="text-gray-500 text-xs mt-1">系统默认不保留临时文件，如需保留将涉及新的数据表设计。</p>
+</div>
+</div>
+<div class="ml-12">
+<div class="relative">
+<textarea class="w-full bg-surface-input border border-border-dark rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all resize-none h-20 placeholder:text-gray-600" placeholder="例如：需要保留记录，文件有效期为7天..."></textarea>
+<div class="absolute bottom-2 right-2 flex gap-2">
+<button class="text-[10px] bg-[#2a2a35] text-gray-400 px-2 py-1 rounded hover:bg-primary/20 hover:text-primary transition-colors border border-border-dark">引用建议: 保留7天</button>
+</div>
+</div>
+</div>
+</div>
+<div class="h-[1px] bg-border-dark/50 w-full ml-12"></div>
+<div class="group">
+<div class="flex gap-4 mb-3">
+<div class="w-8 h-8 rounded bg-primary/20 flex items-center justify-center flex-shrink-0 text-primary font-bold text-sm border border-primary/30 mt-0.5">Q2</div>
+<div class="flex-1">
+<p class="text-gray-200 text-sm leading-relaxed font-medium">权限控制方面：是否只有管理员可以导出，还是所有具有“订单查看”权限的用户均可导出？</p>
+</div>
+</div>
+<div class="ml-12">
+<div class="relative">
+<input class="w-full bg-surface-input border border-border-dark rounded-lg p-3 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-gray-600" placeholder="请输入权限范围..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-border-dark flex items-center justify-between">
+<span class="text-xs text-gray-500">
+                                信息越完善，生成的 PRD 质量越高
+                            </span>
+<div class="flex gap-4">
+<button class="px-5 py-2.5 rounded-lg border border-border-dark text-gray-400 hover:bg-white/5 hover:text-white text-sm font-medium transition-colors">
+                                    暂时跳过，直接生成
+                                </button>
+<button class="group relative flex items-center gap-2 bg-primary hover:bg-primary-hover text-white text-sm font-bold px-6 py-2.5 rounded-lg transition-all shadow-[0_0_20px_rgba(19,19,236,0.4)] hover:shadow-[0_0_30px_rgba(19,19,236,0.6)] hover:-translate-y-0.5">
+<span class="material-symbols-outlined text-[20px] group-hover:rotate-12 transition-transform">auto_awesome</span>
+                                    提交并生成 PRD 初稿
+                                    <div class="absolute inset-0 rounded-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all"></div>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-[400px] flex flex-col p-6 lg:p-10 bg-surface-dark border-l border-border-dark/30 h-auto min-h-full">
+<div class="mb-10">
+<h3 class="text-white text-base font-bold mb-5 flex items-center gap-2 uppercase tracking-wider text-xs text-gray-500">
+<span class="material-symbols-outlined text-primary text-lg">lightbulb</span>
+                    推荐补充信息
+                </h3>
+<div class="flex flex-col gap-3">
+<button class="text-left p-4 rounded-xl bg-surface-input border border-border-dark hover:border-primary/50 hover:bg-[#20202b] transition-all group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/0 group-hover:bg-primary transition-all"></div>
+<div class="flex justify-between items-start mb-1">
+<p class="text-gray-200 text-sm font-medium group-hover:text-white">性能指标 (NFR)</p>
+<span class="material-symbols-outlined text-gray-600 text-[16px] group-hover:text-primary transition-colors">add_circle</span>
+</div>
+<p class="text-gray-500 text-xs line-clamp-2">明确导出任务的最大并发数、最大数据行数限制（如 50,000 行）。</p>
+</button>
+<button class="text-left p-4 rounded-xl bg-surface-input border border-border-dark hover:border-primary/50 hover:bg-[#20202b] transition-all group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/0 group-hover:bg-primary transition-all"></div>
+<div class="flex justify-between items-start mb-1">
+<p class="text-gray-200 text-sm font-medium group-hover:text-white">异常处理流</p>
+<span class="material-symbols-outlined text-gray-600 text-[16px] group-hover:text-primary transition-colors">add_circle</span>
+</div>
+<p class="text-gray-500 text-xs line-clamp-2">定义当导出失败时的重试机制和用户通知方式。</p>
+</button>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-white text-base font-bold mb-5 flex items-center gap-2 uppercase tracking-wider text-xs text-gray-500">
+<span class="material-symbols-outlined text-primary text-lg">layers</span>
+                    项目上下文
+                </h3>
+<div class="space-y-4">
+<div>
+<label class="text-xs text-gray-400 mb-1.5 block">目标模块</label>
+<div class="relative">
+<select class="w-full bg-surface-input border border-border-dark text-gray-200 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary p-3 pr-10 appearance-none cursor-pointer hover:bg-[#20202b] transition-colors">
+<option>Order Management System (v2.1)</option>
+<option>Mobile App (iOS/Android)</option>
+<option>Admin Dashboard</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="text-xs text-gray-400 mb-1.5 block">技术栈约束</label>
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-[#1e1e2d] text-gray-300 border border-border-dark hover:border-primary/50 transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-white mr-1.5"></span>
+                                Next.js 14
+                            </span>
+<span class="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-[#1e1e2d] text-gray-300 border border-border-dark hover:border-primary/50 transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400 mr-1.5"></span>
+                                PostgreSQL
+                            </span>
+<span class="inline-flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium bg-[#1e1e2d] text-gray-300 border border-border-dark hover:border-primary/50 transition-colors cursor-default">
+<span class="w-1.5 h-1.5 rounded-full bg-green-400 mr-1.5"></span>
+                                Redis
+                            </span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-border-dark">
+<div class="p-4 rounded-xl bg-primary/5 border border-primary/10">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5 text-xl">tips_and_updates</span>
+<div>
+<h4 class="text-white text-sm font-bold mb-1">提示技巧</h4>
+<p class="text-gray-400 text-xs leading-relaxed">
+                                如果不确定某些技术细节，可以留空。PM Agent 会在 PRD 中根据最佳实践提供建议方案。
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

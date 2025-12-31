@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevSmart - 警报与通知中心</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#1313ec",
+                    "primary-hover": "#0f0fb8",
+                    "background-light": "#f6f6f8",
+                    "background-dark": "#101022",
+                    "surface-dark": "#16161f",
+                    "surface-input": "#1c1c27",
+                    "border-dark": "#282839",
+                    "accent": "#6366f1",
+                    "danger": "#ef4444",
+                    "warning": "#f59e0b",
+                    "success": "#22c55e",
+                },
+                fontFamily: {
+                    "display": ["Space Grotesk", "sans-serif"],
+                    "body": ["Noto Sans", "Noto Sans SC", "sans-serif"],
+                    "mono": ["monospace"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+        },
+    }
+</script>
+<style>
+    .glowing-orb {
+        box-shadow: 0 0 20px rgba(19, 19, 236, 0.4);
+        animation: pulse-glow 3s infinite;
+    }
+    @keyframes pulse-glow {
+        0% { box-shadow: 0 0 15px rgba(19, 19, 236, 0.3); }
+        50% { box-shadow: 0 0 25px rgba(19, 19, 236, 0.6); }
+        100% { box-shadow: 0 0 15px rgba(19, 19, 236, 0.3); }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #1c1c27; 
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #3b3b54; 
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #4b4b64; 
+    }
+    .glass-panel {
+        background: rgba(28, 28, 39, 0.6);
+        backdrop-filter: blur(10px);
+    }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-body overflow-x-hidden min-h-screen flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-border-dark px-10 py-4 bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-white shadow-[0_0_15px_rgba(19,19,236,0.5)]">
+<span class="material-symbols-outlined">deployed_code</span>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-display">DevSmart</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">仪表盘</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">工作流</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Agent 管理</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">系统设置</a>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-border-dark cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="用户头像" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpehXYxPIBasxCTBKXyCaXGzdS5LYm0txf6kqfGpcJHSEiRBtbBrQ1KMa_HqjbqbbwNFUJ6O7BGkKdbvGI9dNRpDZEu_ZUUrnsa2l8HakisUJxoU0WN1BMFZOWnvHzfAULgBZp6fgKYoOBGlTrzwT7G23Y-NsjYwTqEzrJKthHy1ZH9LosQfpQww0z0wymCq-iNMnZb-MUYvA4QU56JLK_83Cm5XSINyYYf5dCF0Xn7OiB0MzzaXyDuEPYbSX2YWYMI0WkJ2ycTCA");'></div>
+</div>
+</header>
+<main class="flex-1 flex flex-col lg:flex-row max-w-[1600px] w-full mx-auto">
+<div class="flex-1 flex flex-col p-6 lg:p-10 lg:pr-6 border-r border-border-dark/50">
+<div class="flex items-end justify-between mb-8">
+<div>
+<h1 class="text-3xl md:text-4xl font-display font-medium text-white mb-2 tracking-tight">警报与通知中心</h1>
+<p class="text-gray-400 text-base max-w-3xl leading-relaxed">
+                集中监控研发全流程中的异常事件，包括需求分析阻塞、PRD 逻辑冲突、原型渲染失败及测试覆盖率风险。
+            </p>
+</div>
+<button class="hidden md:flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors border border-border-dark bg-surface-input px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-[18px]">history</span>
+            查看历史归档
+        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<div class="bg-surface-input/50 border border-border-dark p-5 rounded-xl flex items-center gap-4 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-danger/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="size-12 rounded-lg bg-danger/10 flex items-center justify-center text-danger border border-danger/20">
+<span class="material-symbols-outlined">error_outline</span>
+</div>
+<div>
+<div class="text-2xl font-display font-bold text-white">3</div>
+<div class="text-xs text-gray-400 font-medium">流程阻断异常</div>
+</div>
+</div>
+<div class="bg-surface-input/50 border border-border-dark p-5 rounded-xl flex items-center gap-4 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-warning/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="size-12 rounded-lg bg-warning/10 flex items-center justify-center text-warning border border-warning/20">
+<span class="material-symbols-outlined">warning_amber</span>
+</div>
+<div>
+<div class="text-2xl font-display font-bold text-white">8</div>
+<div class="text-xs text-gray-400 font-medium">质量风险警告</div>
+</div>
+</div>
+<div class="bg-surface-input/50 border border-border-dark p-5 rounded-xl flex items-center gap-4 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined">feedback</span>
+</div>
+<div>
+<div class="text-2xl font-display font-bold text-white">12</div>
+<div class="text-xs text-gray-400 font-medium">用户反馈建议</div>
+</div>
+</div>
+</div>
+<div class="sticky top-0 z-20 bg-background-dark/80 backdrop-blur-md py-4 mb-4 border-b border-border-dark flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+<div class="flex items-center gap-1 bg-surface-input p-1 rounded-lg border border-border-dark">
+<button class="px-4 py-1.5 bg-primary text-white rounded-md text-sm font-medium shadow-sm transition-all">
+                全部
+            </button>
+<button class="px-4 py-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-md text-sm font-medium transition-all">
+                需求分析流
+            </button>
+<button class="px-4 py-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-md text-sm font-medium transition-all">
+                原型设计流
+            </button>
+<button class="px-4 py-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-md text-sm font-medium transition-all">
+                测试设计流
+            </button>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto">
+<div class="relative flex-1 md:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-[18px]">search</span>
+<input class="w-full bg-surface-input border border-border-dark text-gray-200 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary pl-9 pr-4 py-2 placeholder:text-gray-600" placeholder="搜索警报内容或 Agent..." type="text"/>
+</div>
+<button class="p-2 text-gray-400 hover:text-white border border-border-dark rounded-lg bg-surface-input hover:bg-[#252532] transition-colors" title="过滤设置">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+<button class="p-2 text-gray-400 hover:text-white border border-border-dark rounded-lg bg-surface-input hover:bg-[#252532] transition-colors" title="标记为已读">
+<span class="material-symbols-outlined text-[20px]">done_all</span>
+</button>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-3 min-h-[500px]">
+<div class="group flex flex-col sm:flex-row gap-4 p-5 rounded-xl border border-border-dark bg-surface-input/30 hover:bg-surface-input hover:border-danger/30 transition-all relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-danger"></div>
+<div class="flex-shrink-0 mt-1">
+<div class="size-10 rounded-full bg-danger/10 flex items-center justify-center text-danger border border-danger/20 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+<span class="material-symbols-outlined">psychology_alt</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-white font-bold text-lg tracking-wide group-hover:text-danger transition-colors">PM Agent 语义理解失败</h3>
+<span class="text-xs text-gray-500 font-mono">15分钟前</span>
+</div>
+<p class="text-gray-300 text-sm mb-3 leading-relaxed">
+                    PM Agent 在解析需求文档 "Req-2024-Q3" 时遇到障碍，无法提取第 4 章 "混合云权限管理" 的核心功能点。上下文模糊，导致置信度低于阈值 (35%)。
+                </p>
+<div class="flex flex-wrap items-center gap-3">
+<span class="flex items-center gap-1.5 px-2 py-1 rounded text-[11px] bg-border-dark text-gray-300 font-medium">
+<span class="size-1.5 rounded-full bg-blue-500"></span>
+                        PM Agent
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-danger/10 text-danger border border-danger/20 font-bold uppercase tracking-wide">
+                        阻断
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-surface-input text-gray-400 border border-border-dark">
+                        需求分析流
+                    </span>
+</div>
+</div>
+<div class="flex sm:flex-col justify-end gap-2 border-t sm:border-t-0 sm:border-l border-border-dark pt-3 sm:pt-0 sm:pl-4 mt-2 sm:mt-0 min-w-[100px]">
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-danger/10 hover:bg-danger text-danger hover:text-white text-xs font-bold transition-all text-center border border-danger/20">
+                    人工介入
+                </button>
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-surface-dark hover:bg-white/5 text-gray-400 hover:text-white text-xs font-medium transition-all text-center border border-border-dark">
+                    重新解析
+                </button>
+</div>
+</div>
+<div class="group flex flex-col sm:flex-row gap-4 p-5 rounded-xl border border-border-dark bg-surface-input/30 hover:bg-surface-input hover:border-warning/30 transition-all relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-warning"></div>
+<div class="flex-shrink-0 mt-1">
+<div class="size-10 rounded-full bg-warning/10 flex items-center justify-center text-warning border border-warning/20">
+<span class="material-symbols-outlined">account_tree</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-white font-bold text-lg tracking-wide group-hover:text-warning transition-colors">PRD 业务逻辑冲突检测</h3>
+<span class="text-xs text-gray-500 font-mono">40分钟前</span>
+</div>
+<p class="text-gray-300 text-sm mb-3 leading-relaxed">
+                    Architect Agent 发现生成的 PRD 中 "订单支付模块" 与 "库存扣减模块" 在并发处理逻辑上存在冲突 (Potential Deadlock)。建议引入分布式锁机制或调整事务顺序。
+                </p>
+<div class="flex flex-wrap items-center gap-3">
+<span class="flex items-center gap-1.5 px-2 py-1 rounded text-[11px] bg-border-dark text-gray-300 font-medium">
+<span class="size-1.5 rounded-full bg-purple-500"></span>
+                        Architect Agent
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-warning/10 text-warning border border-warning/20 font-bold uppercase tracking-wide">
+                        警告
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-surface-input text-gray-400 border border-border-dark">
+                        PRD 编写
+                    </span>
+</div>
+</div>
+<div class="flex sm:flex-col justify-end gap-2 border-t sm:border-t-0 sm:border-l border-border-dark pt-3 sm:pt-0 sm:pl-4 mt-2 sm:mt-0 min-w-[100px]">
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-surface-dark hover:bg-white/10 text-gray-300 hover:text-white text-xs font-bold transition-all text-center border border-border-dark">
+                    查看冲突图谱
+                </button>
+</div>
+</div>
+<div class="group flex flex-col sm:flex-row gap-4 p-5 rounded-xl border border-border-dark bg-surface-input/30 hover:bg-surface-input hover:border-danger/30 transition-all relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-danger"></div>
+<div class="flex-shrink-0 mt-1">
+<div class="size-10 rounded-full bg-danger/10 flex items-center justify-center text-danger border border-danger/20">
+<span class="material-symbols-outlined">image_not_supported</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-white font-bold text-lg tracking-wide group-hover:text-danger transition-colors">原型渲染引擎异常</h3>
+<span class="text-xs text-gray-500 font-mono">1小时前</span>
+</div>
+<p class="text-gray-300 text-sm mb-3 leading-relaxed">
+                    UX Agent 在生成 "仪表盘-数据可视化" 页面原型时遇到 WebGL 上下文丢失错误，导致 3D 图表组件无法显示。可能是由于组件复杂度过高引起。
+                </p>
+<div class="flex flex-wrap items-center gap-3">
+<span class="flex items-center gap-1.5 px-2 py-1 rounded text-[11px] bg-border-dark text-gray-300 font-medium">
+<span class="size-1.5 rounded-full bg-pink-500"></span>
+                        UX Agent
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-danger/10 text-danger border border-danger/20 font-bold uppercase tracking-wide">
+                        渲染失败
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-surface-input text-gray-400 border border-border-dark">
+                        原型设计流
+                    </span>
+</div>
+</div>
+<div class="flex sm:flex-col justify-end gap-2 border-t sm:border-t-0 sm:border-l border-border-dark pt-3 sm:pt-0 sm:pl-4 mt-2 sm:mt-0 min-w-[100px]">
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-danger/10 hover:bg-danger text-danger hover:text-white text-xs font-bold transition-all text-center border border-danger/20">
+                    重试生成
+                </button>
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-surface-dark hover:bg-white/5 text-gray-400 hover:text-white text-xs font-medium transition-all text-center border border-border-dark">
+                    忽略组件
+                </button>
+</div>
+</div>
+<div class="group flex flex-col sm:flex-row gap-4 p-5 rounded-xl border border-border-dark bg-surface-input/30 hover:bg-surface-input hover:border-primary/30 transition-all relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex-shrink-0 mt-1">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined">campaign</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-white font-bold text-lg tracking-wide group-hover:text-primary transition-colors">用户反馈关键可用性问题</h3>
+<span class="text-xs text-gray-500 font-mono">2小时前</span>
+</div>
+<p class="text-gray-300 text-sm mb-3 leading-relaxed">
+                    收到来自 Beta 用户的 5 条高优先级反馈：在移动端视图下，主导航菜单无法展开，严重影响核心操作流程。建议立即排查响应式布局规则。
+                </p>
+<div class="flex flex-wrap items-center gap-3">
+<span class="flex items-center gap-1.5 px-2 py-1 rounded text-[11px] bg-border-dark text-gray-300 font-medium">
+<span class="size-1.5 rounded-full bg-blue-500"></span>
+                        PM Agent
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-primary/10 text-primary border border-primary/20 font-bold uppercase tracking-wide">
+                        用户反馈
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-surface-input text-gray-400 border border-border-dark">
+                        需求分析流
+                    </span>
+</div>
+</div>
+<div class="flex sm:flex-col justify-end gap-2 border-t sm:border-t-0 sm:border-l border-border-dark pt-3 sm:pt-0 sm:pl-4 mt-2 sm:mt-0 min-w-[100px]">
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary text-primary hover:text-white text-xs font-bold transition-all text-center border border-primary/20">
+                    创建任务
+                </button>
+</div>
+</div>
+<div class="group flex flex-col sm:flex-row gap-4 p-5 rounded-xl border border-border-dark bg-surface-input/30 hover:bg-surface-input hover:border-warning/30 transition-all relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-warning"></div>
+<div class="flex-shrink-0 mt-1">
+<div class="size-10 rounded-full bg-warning/10 flex items-center justify-center text-warning border border-warning/20">
+<span class="material-symbols-outlined">rule</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-white font-bold text-lg tracking-wide group-hover:text-warning transition-colors">核心路径测试覆盖率不足</h3>
+<span class="text-xs text-gray-500 font-mono">3小时前</span>
+</div>
+<p class="text-gray-300 text-sm mb-3 leading-relaxed">
+                    QA Agent 分析发现当前测试集仅覆盖了 65% 的 "退款流程" 分支，未达到 90% 的最低发布标准。缺乏针对 "退款失败" 的异常处理测试用例。
+                </p>
+<div class="flex flex-wrap items-center gap-3">
+<span class="flex items-center gap-1.5 px-2 py-1 rounded text-[11px] bg-border-dark text-gray-300 font-medium">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                        QA Agent
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-warning/10 text-warning border border-warning/20 font-bold uppercase tracking-wide">
+                        覆盖率低
+                    </span>
+<span class="px-2 py-1 rounded text-[11px] bg-surface-input text-gray-400 border border-border-dark">
+                        测试设计流
+                    </span>
+</div>
+</div>
+<div class="flex sm:flex-col justify-end gap-2 border-t sm:border-t-0 sm:border-l border-border-dark pt-3 sm:pt-0 sm:pl-4 mt-2 sm:mt-0 min-w-[100px]">
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-surface-dark hover:bg-white/10 text-gray-300 hover:text-white text-xs font-bold transition-all text-center border border-border-dark">
+                    自动补充
+                </button>
+<button class="flex-1 px-3 py-1.5 rounded-lg bg-surface-dark hover:bg-white/5 text-gray-400 hover:text-white text-xs font-medium transition-all text-center border border-border-dark">
+                    忽略
+                </button>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-[400px] flex flex-col p-6 lg:p-10 bg-surface-dark border-l border-border-dark/30 h-auto min-h-full">
+<div class="mb-10">
+<h3 class="text-white text-base font-bold mb-5 flex items-center gap-2 uppercase tracking-wider text-xs text-gray-500">
+<span class="material-symbols-outlined text-primary text-lg">ecg_heart</span>
+            系统健康概览
+        </h3>
+<div class="bg-surface-input border border-border-dark rounded-xl p-4 space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-gray-300">需求理解度 (NLP)</span>
+<span class="text-green-400 font-mono">92%</span>
+</div>
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-green-500 rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-gray-300">原型渲染成功率</span>
+<span class="text-primary font-mono">88%</span>
+</div>
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 88%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1.5">
+<span class="text-gray-300">测试覆盖达标率</span>
+<span class="text-warning font-mono">74%</span>
+</div>
+<div class="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
+<div class="h-full bg-warning rounded-full" style="width: 74%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-white text-base font-bold mb-5 flex items-center gap-2 uppercase tracking-wider text-xs text-gray-500">
+<span class="material-symbols-outlined text-primary text-lg">smart_toy</span>
+            Agent 运行状态
+        </h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-input border border-border-dark hover:border-primary/30 transition-all">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-blue-500/10 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined text-lg">psychology</span>
+</div>
+<div>
+<div class="text-sm font-bold text-white">PM Agent</div>
+<div class="text-[10px] text-gray-400">需求分析</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-danger"></span>
+</span>
+<span class="text-[10px] text-danger uppercase font-bold tracking-wide">阻断中</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-input border border-border-dark hover:border-primary/30 transition-all">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-purple-500/10 flex items-center justify-center text-purple-500">
+<span class="material-symbols-outlined text-lg">architecture</span>
+</div>
+<div>
+<div class="text-sm font-bold text-white">Architect Agent</div>
+<div class="text-[10px] text-gray-400">架构设计</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+</span>
+<span class="text-[10px] text-green-400 uppercase font-bold tracking-wide">运行中</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-input border border-border-dark hover:border-primary/30 transition-all">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-green-500/10 flex items-center justify-center text-green-500">
+<span class="material-symbols-outlined text-lg">bug_report</span>
+</div>
+<div>
+<div class="text-sm font-bold text-white">QA Agent</div>
+<div class="text-[10px] text-gray-400">测试生成</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-gray-600"></span>
+<span class="text-[10px] text-gray-500 uppercase font-bold tracking-wide">空闲</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-input border border-border-dark hover:border-primary/30 transition-all">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-pink-500/10 flex items-center justify-center text-pink-500">
+<span class="material-symbols-outlined text-lg">palette</span>
+</div>
+<div>
+<div class="text-sm font-bold text-white">UX Agent</div>
+<div class="text-[10px] text-gray-400">原型设计</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-gray-600"></span>
+<span class="text-[10px] text-gray-500 uppercase font-bold tracking-wide">空闲</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="text-white text-base font-bold mb-5 flex items-center gap-2 uppercase tracking-wider text-xs text-gray-500">
+<span class="material-symbols-outlined text-primary text-lg">category</span>
+            问题分类筛选
+        </h3>
+<div class="space-y-3">
+<label class="flex items-center justify-between cursor-pointer group">
+<div class="flex items-center gap-3">
+<input checked="" class="rounded border-gray-600 bg-[#121218] text-primary focus:ring-0 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-gray-300 group-hover:text-white">需求语义/冲突</span>
+</div>
+<span class="text-xs text-gray-500 bg-surface-input px-2 py-0.5 rounded-full border border-border-dark">3</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<div class="flex items-center gap-3">
+<input checked="" class="rounded border-gray-600 bg-[#121218] text-primary focus:ring-0 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-gray-300 group-hover:text-white">原型渲染异常</span>
+</div>
+<span class="text-xs text-gray-500 bg-surface-input px-2 py-0.5 rounded-full border border-border-dark">1</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<div class="flex items-center gap-3">
+<input checked="" class="rounded border-gray-600 bg-[#121218] text-primary focus:ring-0 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-gray-300 group-hover:text-white">测试覆盖不足</span>
+</div>
+<span class="text-xs text-gray-500 bg-surface-input px-2 py-0.5 rounded-full border border-border-dark">2</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<div class="flex items-center gap-3">
+<input class="rounded border-gray-600 bg-[#121218] text-primary focus:ring-0 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-gray-300 group-hover:text-white">用户关键反馈</span>
+</div>
+<span class="text-xs text-gray-500 bg-surface-input px-2 py-0.5 rounded-full border border-border-dark">5</span>
+</label>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-border-dark">
+<div class="p-4 rounded-xl bg-primary/5 border border-primary/10">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5 text-xl">lightbulb</span>
+<div>
+<h4 class="text-white text-sm font-bold mb-1">Agent 协作建议</h4>
+<p class="text-gray-400 text-xs leading-relaxed">
+                        PM Agent 正等待您对"需求语义失败"的反馈。及时处理可防止下游 Architect Agent 生成错误的架构方案。
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevSmart - 任务管理与分发</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#1313ec",
+                    "primary-hover": "#0f0fb8",
+                    "background-light": "#f6f6f8",
+                    "background-dark": "#101022",
+                    "surface-dark": "#16161f",
+                    "surface-input": "#1c1c27",
+                    "border-dark": "#282839",
+                    "accent": "#6366f1",
+                    "task-card": "#1e1e2d",
+                },
+                fontFamily: {
+                    "display": ["Space Grotesk", "sans-serif"],
+                    "body": ["Noto Sans", "Noto Sans SC", "sans-serif"],
+                    "mono": ["monospace"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+        },
+    }
+</script>
+<style>
+    .glowing-orb {
+        box-shadow: 0 0 20px rgba(19, 19, 236, 0.4);
+        animation: pulse-glow 3s infinite;
+    }
+    @keyframes pulse-glow {
+        0% { box-shadow: 0 0 15px rgba(19, 19, 236, 0.3); }
+        50% { box-shadow: 0 0 25px rgba(19, 19, 236, 0.6); }
+        100% { box-shadow: 0 0 15px rgba(19, 19, 236, 0.3); }
+    }.custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent; 
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #3b3b54; 
+        border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #4b4b64; 
+    }
+    .task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-body overflow-x-hidden min-h-screen flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-border-dark px-10 py-4 bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-white shadow-[0_0_15px_rgba(19,19,236,0.5)]">
+<span class="material-symbols-outlined">deployed_code</span>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em] font-display">DevSmart</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">仪表盘</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">项目</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">团队</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">设置</a>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-border-dark cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="用户头像" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpehXYxPIBasxCTBKXyCaXGzdS5LYm0txf6kqfGpcJHSEiRBtbBrQ1KMa_HqjbqbbwNFUJ6O7BGkKdbvGI9dNRpDZEu_ZUUrnsa2l8HakisUJxoU0WN1BMFZOWnvHzfAULgBZp6fgKYoOBGlTrzwT7G23Y-NsjYwTqEzrJKthHy1ZH9LosQfpQww0z0wymCq-iNMnZb-MUYvA4QU56JLK_83Cm5XSINyYYf5dCF0Xn7OiB0MzzaXyDuEPYbSX2YWYMI0WkJ2ycTCA");'></div>
+</div>
+</header>
+<main class="flex-1 flex flex-col lg:flex-row max-w-[1920px] w-full mx-auto overflow-hidden h-[calc(100vh-73px)]">
+<div class="flex-1 flex flex-col p-6 lg:p-10 lg:pr-6 border-r border-border-dark/50 overflow-hidden h-full">
+<div class="flex items-center gap-4 mb-8 w-full max-w-2xl shrink-0">
+<div class="flex items-center gap-3">
+<div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 border border-primary text-primary text-sm font-bold">
+                    ✓
+                </div>
+<span class="text-primary text-sm font-medium">锁定 PRD</span>
+</div>
+<div class="flex-1 h-[2px] bg-border-dark relative">
+<div class="absolute inset-y-0 left-0 w-full bg-primary opacity-50"></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold shadow-[0_0_10px_rgba(19,19,236,0.5)] z-10">
+                    2
+                    <div class="absolute inset-0 rounded-full border border-white/20"></div>
+</div>
+<span class="text-white text-sm font-bold tracking-wide">任务生成与分发</span>
+</div>
+<div class="flex-1 h-[2px] bg-border-dark relative">
+<div class="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-primary to-transparent opacity-50"></div>
+</div>
+<div class="flex items-center gap-3 opacity-40">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-input border border-border-dark text-gray-400 text-sm font-bold">3</div>
+<span class="text-gray-400 text-sm font-medium">开发与测试</span>
+</div>
+</div>
+<div class="mb-6 shrink-0 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h1 class="text-3xl font-display font-medium text-white tracking-tight">任务管理与分发</h1>
+<span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">PRD-2405: 批量导出功能 (已锁定)</span>
+</div>
+<p class="text-gray-400 text-sm max-w-3xl leading-relaxed">
+                PRD 锁定后，AI Agent 已自动拆解出原型设计与测试设计流任务。请监控自动化进度，处理人工确认节点，并一键分发至 Linear/Jira。
+            </p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-input border border-border-dark text-gray-300 hover:text-white hover:bg-white/5 transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                筛选
+            </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors text-sm font-medium shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                一键同步所有任务
+            </button>
+</div>
+</div>
+<div class="flex-1 overflow-x-auto overflow-y-hidden pb-2">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-w-[1000px]">
+<div class="flex flex-col h-full bg-[#13131a]/50 rounded-xl border border-border-dark/50">
+<div class="p-4 border-b border-border-dark/50 flex items-center justify-between sticky top-0 bg-[#13131a]/90 backdrop-blur-sm z-10 rounded-t-xl">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]"></span>
+<h3 class="text-sm font-bold text-gray-200">AI 处理中</h3>
+<span class="bg-purple-500/10 text-purple-400 text-xs px-1.5 py-0.5 rounded ml-1">2</span>
+</div>
+<button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</div>
+<div class="p-4 space-y-3 overflow-y-auto custom-scrollbar flex-1">
+<div class="bg-task-card p-4 rounded-lg border border-border-dark hover:border-primary/50 transition-all task-card group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-purple-500"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold border border-blue-500/20">原型设计</span>
+<span class="text-purple-400 text-xs flex items-center gap-1 animate-pulse">
+<span class="material-symbols-outlined text-[14px] animate-spin">sync</span>
+                                渲染中 (65%)
+                            </span>
+</div>
+<h4 class="text-white text-sm font-medium mb-1 group-hover:text-primary transition-colors">低保真原型渲染</h4>
+<p class="text-gray-500 text-xs line-clamp-2 mb-3">基于结构提取结果，正在应用 SpaceUI 组件库进行布局生成与组件填充。</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-purple-900/50 flex items-center justify-center border border-purple-500/30">
+<span class="material-symbols-outlined text-purple-300 text-[14px]">brush</span>
+</div>
+<span class="text-xs text-gray-400">Design Agent</span>
+</div>
+<span class="text-[10px] text-gray-500 bg-surface-dark px-1.5 py-0.5 rounded border border-white/5">预计: 5分钟</span>
+</div>
+</div>
+<div class="bg-task-card p-4 rounded-lg border border-border-dark hover:border-primary/50 transition-all task-card group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-purple-500"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 text-[10px] font-bold border border-orange-500/20">测试设计</span>
+<span class="text-purple-400 text-xs flex items-center gap-1 animate-pulse">
+<span class="material-symbols-outlined text-[14px] animate-spin">sync</span>
+                                提取中
+                            </span>
+</div>
+<h4 class="text-white text-sm font-medium mb-1 group-hover:text-primary transition-colors">Gherkin 剧本提取</h4>
+<p class="text-gray-500 text-xs line-clamp-2 mb-3">将“快乐路径”与“异常边界”测试用例转化为标准 Gherkin (Given-When-Then) 语法。</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-purple-900/50 flex items-center justify-center border border-purple-500/30">
+<span class="material-symbols-outlined text-purple-300 text-[14px]">smart_toy</span>
+</div>
+<span class="text-xs text-gray-400">QA Agent</span>
+</div>
+<span class="text-[10px] text-gray-500 bg-surface-dark px-1.5 py-0.5 rounded border border-white/5">预计: 10分钟</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col h-full bg-[#13131a]/50 rounded-xl border border-border-dark/50">
+<div class="p-4 border-b border-border-dark/50 flex items-center justify-between sticky top-0 bg-[#13131a]/90 backdrop-blur-sm z-10 rounded-t-xl">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.6)]"></span>
+<h3 class="text-sm font-bold text-gray-200">待人工确认</h3>
+<span class="bg-yellow-500/10 text-yellow-400 text-xs px-1.5 py-0.5 rounded ml-1">2</span>
+</div>
+<button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-lg">add</span></button>
+</div>
+<div class="p-4 space-y-3 overflow-y-auto custom-scrollbar flex-1">
+<div class="bg-task-card p-4 rounded-lg border border-border-dark hover:border-primary/50 transition-all task-card group relative">
+<div class="absolute top-0 left-0 w-1 h-full bg-yellow-500"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold border border-blue-500/20">原型设计</span>
+<span class="text-yellow-500 text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">pan_tool</span>
+                                需复核
+                            </span>
+</div>
+<h4 class="text-white text-sm font-medium mb-1 group-hover:text-primary transition-colors">组件匹配策略确认</h4>
+<p class="text-gray-500 text-xs line-clamp-2 mb-3">AI 推荐使用 ComplexTable 组件展示数据 (置信度 85%)，需确认是否符合移动端降级策略。</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center border border-gray-600">
+<span class="material-symbols-outlined text-gray-300 text-[14px]">person</span>
+</div>
+<span class="text-xs text-gray-400">Design Lead</span>
+</div>
+<div class="flex gap-1">
+<button class="p-1 rounded hover:bg-white/10 text-green-400" title="批准"><span class="material-symbols-outlined text-[16px]">check</span></button>
+<button class="p-1 rounded hover:bg-white/10 text-gray-400" title="修改"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+</div>
+</div>
+</div>
+<div class="bg-task-card p-4 rounded-lg border border-border-dark hover:border-primary/50 transition-all task-card group relative">
+<div class="absolute top-0 left-0 w-1 h-full bg-yellow-500"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 text-[10px] font-bold border border-orange-500/20">测试设计</span>
+<span class="text-yellow-500 text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                                需复核
+                            </span>
+</div>
+<h4 class="text-white text-sm font-medium mb-1 group-hover:text-primary transition-colors">安全场景测试审查</h4>
+<p class="text-gray-500 text-xs line-clamp-2 mb-3">生成了针对“批量导出接口”的 IDOR 越权访问与 SQL 注入防御测试用例。</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center border border-gray-600">
+<span class="material-symbols-outlined text-gray-300 text-[14px]">person</span>
+</div>
+<span class="text-xs text-gray-400">Security Eng</span>
+</div>
+<div class="flex gap-1">
+<button class="p-1 rounded hover:bg-white/10 text-green-400" title="批准"><span class="material-symbols-outlined text-[16px]">check</span></button>
+<button class="p-1 rounded hover:bg-white/10 text-gray-400" title="修改"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col h-full bg-[#13131a]/50 rounded-xl border border-border-dark/50">
+<div class="p-4 border-b border-border-dark/50 flex items-center justify-between sticky top-0 bg-[#13131a]/90 backdrop-blur-sm z-10 rounded-t-xl">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+<h3 class="text-sm font-bold text-gray-200">已分发 / 外部同步</h3>
+<span class="bg-green-500/10 text-green-400 text-xs px-1.5 py-0.5 rounded ml-1">2</span>
+</div>
+<button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-lg">history</span></button>
+</div>
+<div class="p-4 space-y-3 overflow-y-auto custom-scrollbar flex-1">
+<div class="bg-task-card p-4 rounded-lg border border-border-dark hover:border-green-500/30 transition-all task-card group relative opacity-80 hover:opacity-100">
+<div class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 text-[10px] font-bold border border-orange-500/20">测试设计</span>
+<span class="text-green-500 text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                已同步 Linear
+                            </span>
+</div>
+<h4 class="text-white text-sm font-medium mb-1 group-hover:text-green-400 transition-colors">快乐路径测试用例</h4>
+<p class="text-gray-500 text-xs line-clamp-1 mb-2">正常业务流程：筛选 -&gt; 选择列 -&gt; 导出 Excel。</p>
+<div class="flex items-center gap-2 mb-3 mt-1">
+<span class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#5E6AD2]/20 text-[#8b96f5] text-[10px] border border-[#5E6AD2]/30">
+<span class="material-symbols-outlined text-[10px]">link</span> LIN-3922
+                             </span>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="text-[10px] font-bold text-primary">DS</span>
+</div>
+<span class="text-xs text-gray-400">DevSmart Bot</span>
+</div>
+<span class="text-[10px] text-gray-600">Linear / QA</span>
+</div>
+</div>
+<div class="bg-task-card p-4 rounded-lg border border-border-dark hover:border-green-500/30 transition-all task-card group relative opacity-80 hover:opacity-100">
+<div class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold border border-blue-500/20">原型设计</span>
+<span class="text-green-500 text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span>
+                                完成
+                            </span>
+</div>
+<h4 class="text-white text-sm font-medium mb-1 group-hover:text-green-400 transition-colors">原型页面结构提取</h4>
+<p class="text-gray-500 text-xs line-clamp-2 mb-3">成功从 PRD 解析出 "导出配置弹窗" 与 "任务管理列表" 两个核心页面节点。</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-purple-900/50 flex items-center justify-center border border-purple-500/30">
+<span class="material-symbols-outlined text-purple-300 text-[14px]">smart_toy</span>
+</div>
+<span class="text-xs text-gray-400">Design Agent</span>
+</div>
+<span class="text-[10px] text-gray-600">5分钟前</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-[400px] flex flex-col p-6 lg:p-10 bg-surface-dark border-l border-border-dark/30 h-auto min-h-full overflow-y-auto">
+<div class="mb-10">
+<h3 class="text-white text-base font-bold mb-5 flex items-center gap-2 uppercase tracking-wider text-xs text-gray-500">
+<span class="material-symbols-outlined text-primary text-lg">hub</span>
+                分发目标系统状态
+            </h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-input border border-border-dark">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-[#5E6AD2] flex items-center justify-center text-white font-bold text-xs">L</div>
+<div>
+<p class="text-gray-200 text-sm font-medium">Linear</p>
+<p class="text-gray-500 text-xs">Team: Core Product</p>
+</div>
+</div>
+<span class="flex h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-input border border-border-dark">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-[#0052cc] flex items-center justify-center text-white font-bold text-xs">J</div>
+<div>
+<p class="text-gray-200 text-sm font-medium">Jira Software</p>
+<p class="text-gray-500 text-xs">Project: ENT_Delivery</p>
+</div>
+</div>
+<span class="flex h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-input border border-border-dark">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-[#F24E1E] flex items-center justify-center text-white font-bold text-xs">F</div>
+<div>
+<p class="text-gray-200 text-sm font-medium">Figma</p>
+<p class="text-gray-500 text-xs">File: UX_2024_Q3</p>
+</div>
+</div>
+<span class="flex h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+</div>
+</div>
+</div>
+<div class="mb-8 flex-1">
+<h3 class="text-white text-base font-bold mb-5 flex items-center gap-2 uppercase tracking-wider text-xs text-gray-500">
+<span class="material-symbols-outlined text-primary text-lg">monitor_heart</span>
+                Agent 活动日志
+            </h3>
+<div class="relative pl-4 border-l border-border-dark space-y-6">
+<div class="relative">
+<div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-purple-500 border border-surface-dark shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+<p class="text-gray-300 text-sm mb-1"><span class="text-purple-400 font-bold">QA Agent</span> 启动 Gherkin 剧本转换</p>
+<p class="text-gray-500 text-xs">刚刚</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-purple-500 border border-surface-dark shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+<p class="text-gray-300 text-sm mb-1"><span class="text-purple-400 font-bold">Design Agent</span> 开始低保真原型渲染</p>
+<p class="text-gray-500 text-xs">1 分钟前</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-green-500 border border-surface-dark"></div>
+<p class="text-gray-300 text-sm mb-1">测试用例(快乐路径) 已同步至 <span class="text-[#8b96f5]">Linear</span></p>
+<p class="text-gray-500 text-xs">3 分钟前</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-gray-600 border border-surface-dark"></div>
+<p class="text-gray-400 text-sm mb-1">原型页面结构提取完成</p>
+<p class="text-gray-500 text-xs">5 分钟前</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-border-dark">
+<div class="p-4 rounded-xl bg-surface-input border border-border-dark">
+<div class="flex justify-between items-center mb-2">
+<h4 class="text-gray-200 text-sm font-bold">任务自动化率</h4>
+<span class="text-primary text-lg font-bold font-display">92%</span>
+</div>
+<div class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 92%"></div>
+</div>
+<p class="text-gray-500 text-xs mt-2">
+        当前流程中 92% 的设计与测试任务由 AI Agent 生成，效率提升显著。
+    </p>
+</div>
+</div>
+</div>
+</div></main>
+
+</body></html>
