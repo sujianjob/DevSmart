@@ -1,7 +1,29 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(agent-browser snapshot:*)",
+      "Bash(agent-browser open \"https://open.oceanengine.com/labels/34?origin=left_nav\")",
+      "Bash(agent-browser wait:*)",
+      "Bash(agent-browser get:*)",
+      "Bash(agent-browser find role main get text)",
+      "Bash(agent-browser find text \"术语解释\" click)",
+      "Bash(agent-browser find text \"接口清单（Scope权限点）\" click)",
+      "Bash(agent-browser find text \"获取Access Token\" click)",
+      "Bash(agent-browser open \"https://open.oceanengine.com/labels/7/docs/1696710505596940\")",
+      "Bash(agent-browser find text \"刷新Refresh Token\" click)",
+      "Bash(agent-browser find text \"获取客户信息\" click)",
+      "Bash(agent-browser open:*)",
+      "Bash(/Users/xdd/.version-fox/temp/1768838400-90155/nodejs/bin/agent-browser:*)",
+      "Bash(agent-browser session:*)",
+      "Bash(agent-browser:*)",
+      "Skill(agent-browser)",
+      "Skill(web-scraper)",
+      "Bash(python3:*)"
     ]
   }
 }

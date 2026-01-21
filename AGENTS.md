@@ -98,4 +98,15 @@
 
 ---
 
+## Browser Automation
+
+Use `agent-browser` for web automation. Run `agent-browser --help` for all commands.
+
+Core workflow:
+1. `agent-browser open <url>` - Navigate to page
+2. `agent-browser snapshot -i` - Get interactive elements with refs (@e1, @e2)
+3. `agent-browser click @e1` / `fill @e2 "text"` - Interact using refs
+4. Re-snapshot after page changes
+
+
 > **注意**：用户接下来给出的所有指令，均视为在上述 AGENTS 约束下的具体任务。若用户显式指令与本指南冲突，请优先服从用户最新显式指令，并在【前置说明】中简要记录偏差原因。
