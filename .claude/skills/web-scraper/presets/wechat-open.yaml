@@ -1,0 +1,68 @@
+# 微信开放平台预设
+# 适用于: https://developers.weixin.qq.com/doc
+
+name: 微信开放平台
+url_pattern: "developers.weixin.qq.com"
+site_type: spa
+
+# 导航配置
+navigation:
+  type: nested_sidebar
+  expand_method: click
+  expand_wait: 800
+  levels: 4                   # 微信文档有 4 层
+  expand_indicators:
+    collapsed: ["▸", ">"]
+    expanded: ["▾", "∨"]
+
+# 内容选择器
+content:
+  main_selector: ".content-main, .markdown-section"
+  title_selector: "h1, .doc-title"
+  exclude:
+    - ".sidebar-nav"
+    - ".header"
+    - ".footer"
+    - ".feedback"
+    - ".share-btns"
+
+# 时间配置
+timing:
+  page_load: 2500
+  menu_expand: 800
+  content_render: 1500
+  between_pages: 300
+
+# SPA 特殊配置
+spa:
+  initial_wait: 2500
+  navigation_method: click
+  avoid_direct_open: true
+  # 微信文档有时需要等待 API 加载
+  api_data_wait: 1000
+
+# 输出配置
+output:
+  structure: mirror_navigation
+  filename_from: title
+  index_file: README.md
+
+# 特殊处理
+special:
+  api_extraction: true
+  code_language_detect: true
+  preserve_tables: true
+  # 微信文档包含大量代码示例
+  extract_code_samples: true
+
+# 必爬板块（按产品分类）
+required_sections:
+  - "小程序"
+  - "公众号"
+  - "开放平台"
+  - "企业微信"
+
+# 跳过板块
+skip_sections:
+  - "社区"
+  - "问答"

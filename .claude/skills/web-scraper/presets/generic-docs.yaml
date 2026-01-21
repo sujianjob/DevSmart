@@ -1,0 +1,87 @@
+# 通用文档站点预设
+# 适用于: VuePress, Docusaurus, GitBook, MkDocs 等文档框架
+
+name: 通用文档站点
+url_pattern: "*"              # 通配，作为默认预设
+site_type: auto               # 自动检测
+
+# 导航配置
+navigation:
+  type: auto                  # 自动识别导航类型
+  expand_method: click        # 默认点击展开
+  expand_wait: 500
+  levels: 3
+  expand_indicators:
+    collapsed: ["▸", "▶", "+", ">", "›"]
+    expanded: ["▾", "▼", "-", "∨", "⌄"]
+  # 常见导航选择器
+  selectors:
+    - ".sidebar"
+    - ".nav-sidebar"
+    - ".docs-sidebar"
+    - "[role='navigation']"
+    - ".menu"
+
+# 内容选择器（尝试多个）
+content:
+  main_selector: |
+    .markdown-body,
+    .content,
+    article,
+    .doc-content,
+    main,
+    #main-content,
+    .page-content
+  title_selector: "h1"
+  exclude:
+    - "nav"
+    - "header"
+    - "footer"
+    - ".sidebar"
+    - ".toc"
+    - ".edit-link"
+    - ".page-nav"
+    - ".social-links"
+
+# 时间配置（保守值）
+timing:
+  page_load: 2000
+  menu_expand: 500
+  content_render: 1000
+  between_pages: 300
+
+# SPA 检测
+spa:
+  auto_detect: true           # 自动检测是否为 SPA
+  initial_wait: 2000
+  detection_method:
+    - "点击后无白屏刷新"
+    - "URL 变化但内容局部更新"
+    - "包含 React/Vue/Angular 标识"
+
+# 输出配置
+output:
+  structure: mirror_navigation
+  filename_from: title
+  index_file: README.md
+
+# 特殊处理
+special:
+  api_extraction: false       # 默认不结构化 API
+  code_language_detect: true
+  preserve_tables: true
+
+# 框架特定配置
+frameworks:
+  vuepress:
+    sidebar_selector: ".sidebar-links"
+    content_selector: ".theme-default-content"
+  docusaurus:
+    sidebar_selector: ".menu__list"
+    content_selector: "article"
+  gitbook:
+    sidebar_selector: ".book-summary"
+    content_selector: ".page-inner"
+  mkdocs:
+    sidebar_selector: ".md-sidebar"
+    content_selector: ".md-content"

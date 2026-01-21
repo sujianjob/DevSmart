@@ -1,0 +1,68 @@
+# 巨量引擎开放平台预设
+# 适用于: https://open.oceanengine.com/doc
+
+name: 巨量引擎开放平台
+url_pattern: "open.oceanengine.com"
+site_type: spa
+
+# 导航配置
+navigation:
+  type: nested_sidebar        # 嵌套侧边栏
+  expand_method: click        # 点击展开
+  expand_wait: 1000           # 展开等待 1 秒
+  levels: 3                   # 最多 3 层嵌套
+  expand_indicators:          # 展开状态标识
+    collapsed: ["▸", "▶", "+"]
+    expanded: ["▾", "▼", "-"]
+
+# 内容选择器
+content:
+  main_selector: ".doc-content, .markdown-body, article"
+  title_selector: "h1, .doc-title"
+  exclude:
+    - ".sidebar"
+    - ".nav"
+    - ".header"
+    - ".footer"
+    - ".breadcrumb"
+    - ".toc"
+
+# 时间配置
+timing:
+  page_load: 3000             # 首次加载等待
+  menu_expand: 1000           # 菜单展开等待
+  content_render: 2000        # 内容渲染等待
+  between_pages: 500          # 页面间间隔
+
+# SPA 特殊配置
+spa:
+  initial_wait: 3000          # SPA 初始化等待
+  navigation_method: click    # 必须通过 click 导航
+  avoid_direct_open: true     # 避免直接 open 子页面
+
+# 输出配置
+output:
+  structure: mirror_navigation
+  filename_from: title
+  index_file: README.md
+
+# 特殊处理
+special:
+  # API 文档结构化
+  api_extraction: true
+  # 代码块语言检测
+  code_language_detect: true
+  # 表格保留格式
+  preserve_tables: true
+
+# 必爬板块
+required_sections:
+  - "账号服务"
+  - "投放管理"
+  - "数据报表"
+  - "工具接口"
+  - "错误码"
+
+# 跳过板块
+skip_sections:
+  - "更新日志"              # 可选爬取
