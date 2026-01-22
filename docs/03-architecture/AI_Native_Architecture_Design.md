@@ -29,9 +29,9 @@ graph TD
 *基于 LangGraph 的核心状态机，负责“思考”与“调度”。*
 *   **Supervisor Agent**: 总控节点，理解用户意图，拆解任务，分发给子 Agent。
 *   **Specialized Agents**: 垂类专家 Agent。
-    *   *PM Agent*: 负责需求分析、PRD 生成。
-    *   *Coder Agent*: 负责代码生成、重构。
-    *   *QA Agent*: 负责测试用例生成、Bug 分析。
+    *   *PM Agent*: 负责需求分析、PRD 生成（**执行器**）。
+    *   *Coder Agent*: 负责任务分发、上下文注入、状态同步（**协调器，不直接写代码**）。
+    *   *QA Agent*: 负责测试用例生成、Bug 分析（**执行器**）。
 *   **State Manager**: 利用 LangGraph Checkpointer 管理全局状态（Context），支持“时光倒流”和“断点续传”。
 
 ### 2.3 能力抽象层 (Capability Interface Layer)
@@ -105,12 +105,15 @@ graph TD
 *   **工具**：RAG (查竞品/历史需求), Issue Tracker (Jira)。
 *   **输出**：结构化 PRD (Markdown/JSON)，包含验收标准 (Acceptance Criteria)。
 
-#### 💻 Coder Agent (开发协调者)
-*   **定位**：**连接器 (Linker)** 而非单纯的执行者。
-*   **职责**：
-    *   *任务分发*：将拆解后的 Task 转换为标准指令，唤起外部 **Code CLI** 或通过 IDE 插件通知人类开发者。
-    *   *上下文注入*：为外部工具提供必要的 RAG 上下文（如架构规范、接口定义）。
-    *   *结果同步*：监听外部工具的执行结果（Commit/PR），更新任务状态。
+#### 💻 Coder Agent (开发协调智能体)
+*   **定位**：**协调器 (Coordinator)** 而非执行器，**不直接编写代码**。
+*   **核心职责**：
+    *   *任务分发*：将拆解后的 Task 转换为标准指令，分发给外部 **Code CLI**（如 Cursor CLI、Copilot CLI）或通过 IDE 插件通知人类开发者。
+    *   *上下文注入*：自动为任务附加必要的 RAG 上下文（相关代码文件、架构规范、接口定义、历史讨论）。
+    *   *状态同步*：监听外部工具的执行结果（Commit/PR），实时更新任务状态到系统看板。
+    *   *质量把关*：触发 Code Review 流程，收集反馈并决定是否需要返工。
+
+> **重要说明**：Coder Agent 的价值在于"编排"而非"编码"。它是人类开发者和 AI 编码工具之间的桥梁，确保任务有充分的上下文、结果有完整的追踪。具体的代码生成工作由外部专业工具（如 Cursor、GitHub Copilot）完成。
 
 #### 🔍 QA Agent (质量守门员)
 *   **工具**：对接外部测试平台 (Test Platform), CI 流水线。
