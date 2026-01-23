@@ -23,7 +23,16 @@
       "Bash(agent-browser:*)",
       "Skill(agent-browser)",
       "Skill(web-scraper)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor\\(web-scraper\\): 优化文档结构并新增断点续爬、预设系统功能\n\n- 主文件 SKILL.md 从 1087 行精简至 392 行\n- 新增 ADVANCED.md 高级功能文档\n- 新增 TEMPLATES.md 输出模板文档\n- 新增 presets/ 预设配置系统\n  - oceanengine.yaml 巨量引擎预设\n  - wechat-open.yaml 微信开放平台预设\n  - generic-docs.yaml 通用文档站点预设\n- 新增断点续爬机制（.scraper-state.json）\n- 新增进度显示和错误恢复策略\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(ls:*)",
+      "WebSearch",
+      "WebFetch(domain:blog.langchain.com)",
+      "WebFetch(domain:langchain-ai.github.io)",
+      "WebFetch(domain:docs.langchain.com)",
+      "WebFetch(domain:pypi.org)",
+      "WebFetch(domain:registry.npmjs.org)"
     ]
   }
 }
