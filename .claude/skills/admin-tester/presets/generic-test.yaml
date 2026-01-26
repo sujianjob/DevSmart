@@ -1,0 +1,334 @@
+# 通用后台管理系统测试预设
+# 适用于大多数后台管理系统的测试配置
+
+preset:
+  name: "通用测试配置"
+  description: "适用于大多数后台管理系统的标准测试配置，覆盖列表页、表单页、导航和常见操作"
+  version: "1.0"
+  author: "admin-tester"
+
+# === 执行配置 ===
+config:
+  execution:
+    # 单步超时时间（毫秒）
+    timeout: 30000
+    # 失败重试次数
+    retry_on_failure: 1
+    # 失败时自动截图
+    screenshot_on_failure: true
+    # 成功时自动截图（建议关闭以节省空间）
+    screenshot_on_success: false
+    # 默认等待时间（毫秒）- 页面跳转后的等待
+    default_wait: 2000
+    # 点击后等待时间（毫秒）
+    click_wait: 1000
+    # 网络空闲超时（毫秒）
+    network_idle_timeout: 5000
+
+  # 优先级配置
+  priority:
+    # 默认优先级
+    default: P2
+    # 各类测试的优先级
+    navigation: P0          # 导航测试 - 最高优先级
+    list_structure: P1      # 列表结构验证
+    form_required: P1       # 表单必填验证
+    form_submit: P1         # 表单提交
+    list_filter: P2         # 列表筛选
+    list_pagination: P2     # 列表分页
+    form_format: P2         # 表单格式验证
+    action_delete: P2       # 删除操作
+    action_edit: P2         # 编辑操作
+    dropdown_options: P3    # 下拉选项验证
+    breadcrumb: P3          # 面包屑导航
+
+  # 报告配置
+  report:
+    format: "markdown"
+    include_screenshots: true
+    include_logs: true
+    include_coverage: true
+
+# === 测试用例生成规则 ===
+rules:
+  # --- 列表页测试 ---
+  list_page:
+    enabled: true
+    tests:
+      # 表格结构验证 - 检查表头是否完整
+      - name: structure_verify
+        enabled: true
+        priority: P1
+        description: "验证表格包含所有预期列"
+
+      # 筛选功能验证 - 测试搜索/筛选
+      - name: filter_verify
+        enabled: true
+        priority: P2
+        description: "验证筛选条件可正常使用"
+        # 仅当列表页有筛选区域时生成
+        condition: "has_filter_area"
+
+      # 分页功能验证
+      - name: pagination_verify
+        enabled: true
+        priority: P2
+        description: "验证分页组件功能正常"
+        # 仅当有分页器时生成
+        condition: "has_pagination"
+
+      # 排序功能验证
+      - name: sort_verify
+        enabled: false  # 默认关闭，按需启用
+        priority: P3
+        description: "验证表格排序功能"
+
+      # 空状态验证
+      - name: empty_state_verify
+        enabled: false  # 默认关闭
+        priority: P3
+        description: "验证无数据时的空状态显示"
+
+  # --- 表单测试 ---
+  form_page:
+    enabled: true
+    tests:
+      # 必填字段验证
+      - name: required_verify
+        enabled: true
+        priority: P1
+        description: "验证必填字段的验证提示"
+
+      # 格式验证
+      - name: format_verify
+        enabled: true
+        priority: P2
+        description: "验证字段格式校验（邮箱、手机等）"
+        # 仅当有格式验证字段时生成
+        condition: "has_format_validation"
+
+      # 下拉选项验证
+      - name: dropdown_verify
+        enabled: true
+        priority: P3
+        description: "验证下拉框选项是否完整"
+        # 仅当有下拉框时生成
+        condition: "has_dropdown"
+
+      # 表单提交成功验证
+      - name: submit_verify
+        enabled: true
+        priority: P1
+        description: "验证表单可正常提交"
+        # 需要有效测试数据
+        requires_test_data: true
+
+      # 重置功能验证
+      - name: reset_verify
+        enabled: false  # 默认关闭
+        priority: P3
+        description: "验证表单重置功能"
+
+  # --- 导航测试 ---
+  navigation:
+    enabled: true
+    tests:
+      # 菜单点击导航
+      - name: menu_click
+        enabled: true
+        priority: P0
+        description: "验证菜单点击后正确导航"
+
+      # 菜单展开收起
+      - name: menu_expand
+        enabled: true
+        priority: P1
+        description: "验证有子菜单的菜单项展开收起"
+        # 仅当有多级菜单时生成
+        condition: "has_submenu"
+
+      # 面包屑导航
+      - name: breadcrumb
+        enabled: true
+        priority: P3
+        description: "验证面包屑显示正确且可点击"
+        # 仅当页面有面包屑时生成
+        condition: "has_breadcrumb"
+
+  # --- 操作测试 ---
+  actions:
+    enabled: true
+    tests:
+      # 删除确认弹窗
+      - name: delete_confirm
+        enabled: true
+        priority: P2
+        description: "验证删除操作的确认弹窗"
+        # 仅当有删除按钮时生成
+        condition: "has_delete_button"
+
+      # 编辑页面跳转
+      - name: edit_navigate
+        enabled: true
+        priority: P2
+        description: "验证编辑按钮跳转到编辑页面"
+        # 仅当有编辑按钮时生成
+        condition: "has_edit_button"
+
+      # 批量选择
+      - name: batch_select
+        enabled: true
+        priority: P3
+        description: "验证批量选择和批量操作"
+        # 仅当有批量操作时生成
+        condition: "has_batch_actions"
+
+      # 导出功能
+      - name: export
+        enabled: false  # 默认关闭
+        priority: P3
+        description: "验证数据导出功能"
+
+# === 验证规则配置 ===
+validations:
+  # 表格验证规则
+  table:
+    # 检查表头列是否完整
+    check_columns: true
+    # 检查分页组件
+    check_pagination: true
+    # 检查空状态显示
+    check_empty_state: false
+    # 检查操作列
+    check_action_column: true
+    # 表格选择器（按优先级匹配）
+    selectors:
+      - ".ant-table"
+      - ".el-table"
+      - ".arco-table"
+      - ".ivu-table"
+      - "table"
+
+  # 表单验证规则
+  form:
+    # 检查必填字段验证
+    check_required: true
+    # 检查格式验证
+    check_format: true
+    # 检查下拉选项
+    check_dropdown: true
+    # 检查提交按钮
+    check_submit_button: true
+    # 表单选择器
+    selectors:
+      - ".ant-form"
+      - ".el-form"
+      - ".arco-form"
+      - "form"
+    # 错误提示选择器
+    error_selectors:
+      - ".ant-form-item-explain-error"
+      - ".el-form-item__error"
+      - ".arco-form-message"
+      - ".field-error"
+
+  # 弹窗验证规则
+  dialog:
+    # 弹窗选择器
+    selectors:
+      - ".ant-modal"
+      - ".el-dialog"
+      - ".arco-modal"
+      - ".ivu-modal"
+    # 确认按钮选择器
+    confirm_selectors:
+      - ".ant-modal-confirm-btns .ant-btn-primary"
+      - ".el-message-box__btns .el-button--primary"
+      - ".arco-modal-footer .arco-btn-primary"
+
+  # 菜单验证规则
+  menu:
+    # 菜单选择器
+    selectors:
+      - ".ant-menu"
+      - ".el-menu"
+      - ".arco-menu"
+      - ".ivu-menu"
+    # 子菜单展开标识
+    expanded_class:
+      - "ant-menu-submenu-open"
+      - "el-submenu.is-opened"
+      - "arco-menu-inline-content"
+
+# === 排除规则 ===
+exclusions:
+  # 排除的页面类型（不生成测试）
+  page_types: []
+    # - "dashboard"  # 排除仪表盘
+
+  # 排除的模块（正则表达式）
+  modules: []
+    # - "^日志.*"      # 排除以"日志"开头的模块
+    # - ".*测试$"      # 排除以"测试"结尾的模块
+
+  # 排除的 URL 路径（正则表达式）
+  urls: []
+    # - "/debug/.*"
+    # - "/internal/.*"
+
+  # 排除的操作类型
+  actions: []
+    # - "export"      # 排除导出测试
+    # - "import"      # 排除导入测试
+
+# === 测试数据配置 ===
+test_data:
+  # 数据生成规则
+  generation:
+    # 用户名格式
+    username: "TEST_{{RANDOM:6}}"
+    # 邮箱格式
+    email: "test_{{RANDOM:6}}@example.com"
+    # 手机号格式
+    phone: "138{{RANDOM_NUM:8}}"
+    # 默认密码
+    password: "Test@123456"
+
+  # 边界测试数据
+  boundary:
+    # 空字符串
+    empty: ""
+    # 超长字符串（用于长度限制测试）
+    long_string_100: "{{REPEAT:a:100}}"
+    long_string_500: "{{REPEAT:a:500}}"
+    # 特殊字符（用于 XSS 测试）
+    special_chars: "<script>alert('xss')</script>"
+
+  # 格式错误数据（用于格式验证测试）
+  invalid_formats:
+    email: "invalid-email"
+    phone: "123"
+    id_card: "abc123"
+    url: "not-a-url"
+
+# === 标签配置 ===
+tags:
+  # 冒烟测试标签
+  smoke_test:
+    - navigation
+    - list_structure
+    - form_required
+
+  # 回归测试标签
+  regression_test:
+    - navigation
+    - list_structure
+    - list_filter
+    - form_required
+    - form_format
+    - action_delete
+    - action_edit
+
+  # 完整测试标签
+  full_test:
+    - all

@@ -1,0 +1,514 @@
+# 通用后台管理系统预设
+# 兼容 Ant Design Pro, Element UI, Arco Design 等主流后台框架
+
+name: generic-admin
+description: 通用后台管理系统预设，兼容主流 UI 框架
+version: "1.0"
+
+# ============================================
+# 框架识别
+# ============================================
+framework_detection:
+  # 框架标识选择器
+  selectors:
+    - ".ant-layout"           # Ant Design
+    - ".ant-pro-layout"       # Ant Design Pro
+    - ".el-container"         # Element UI
+    - ".arco-layout"          # Arco Design
+    - ".ivu-layout"           # iView / View UI
+    - ".layui-layout"         # LayUI
+    - ".admin-layout"         # 通用命名
+
+  # CSS 类名前缀识别
+  class_prefix:
+    ant: "Ant Design"
+    el: "Element UI"
+    arco: "Arco Design"
+    ivu: "iView"
+    layui: "LayUI"
+
+# ============================================
+# 导航配置
+# ============================================
+navigation:
+  # 侧边栏
+  sidebar:
+    selectors:
+      - ".ant-layout-sider"
+      - ".ant-pro-sider"
+      - ".el-aside"
+      - ".arco-layout-sider"
+      - ".ivu-layout-sider"
+      - "[class*='sidebar']"
+      - "[class*='sider']"
+      - "aside"
+
+  # 菜单容器
+  menu:
+    selectors:
+      - ".ant-menu"
+      - ".ant-pro-sider-menu"
+      - ".el-menu"
+      - ".arco-menu"
+      - ".ivu-menu"
+      - ".layui-nav"
+      - "[class*='nav-menu']"
+      - "[class*='side-menu']"
+      - "nav ul"
+
+  # 菜单项
+  menu_item:
+    selectors:
+      - ".ant-menu-item"
+      - ".el-menu-item"
+      - ".arco-menu-item"
+      - ".ivu-menu-item"
+      - ".layui-nav-item"
+      - "[class*='menu-item']"
+      - "[role='menuitem']"
+
+  # 子菜单/折叠菜单
+  submenu:
+    selectors:
+      - ".ant-menu-submenu"
+      - ".el-submenu"
+      - ".arco-menu-inline"
+      - ".ivu-menu-submenu"
+      - "[class*='submenu']"
+      - "[class*='sub-menu']"
+
+    # 折叠状态指示器
+    collapsed_indicators:
+      - "[aria-expanded='false']"
+      - ".ant-menu-submenu-closed"
+      - ".el-submenu:not(.is-opened)"
+      - "[class*='collapsed']"
+      - "[class*='closed']"
+
+    # 展开状态指示器
+    expanded_indicators:
+      - "[aria-expanded='true']"
+      - ".ant-menu-submenu-open"
+      - ".el-submenu.is-opened"
+      - "[class*='expanded']"
+      - "[class*='opened']"
+
+  # 展开/折叠按钮
+  toggle_button:
+    selectors:
+      - ".ant-menu-submenu-arrow"
+      - ".el-submenu__icon-arrow"
+      - ".arco-menu-icon-suffix"
+      - "[class*='arrow']"
+      - "[class*='toggle']"
+      - "[class*='expand']"
+
+  # 面包屑
+  breadcrumb:
+    selectors:
+      - ".ant-breadcrumb"
+      - ".el-breadcrumb"
+      - ".arco-breadcrumb"
+      - "[class*='breadcrumb']"
+
+# ============================================
+# 页面元素配置
+# ============================================
+elements:
+  # 表格
+  table:
+    selectors:
+      - ".ant-table"
+      - ".ant-pro-table"
+      - ".el-table"
+      - ".arco-table"
+      - ".ivu-table"
+      - ".layui-table"
+      - "table"
+
+    header:
+      selectors:
+        - ".ant-table-thead"
+        - ".el-table__header"
+        - ".arco-table-header"
+        - "thead"
+
+    body:
+      selectors:
+        - ".ant-table-tbody"
+        - ".el-table__body"
+        - ".arco-table-body"
+        - "tbody"
+
+    row:
+      selectors:
+        - ".ant-table-row"
+        - ".el-table__row"
+        - ".arco-table-tr"
+        - "tr"
+
+    cell:
+      selectors:
+        - ".ant-table-cell"
+        - ".el-table__cell"
+        - "td"
+
+    # 操作列
+    action_column:
+      keywords:
+        - "操作"
+        - "Actions"
+        - "Operation"
+
+  # 表单
+  form:
+    selectors:
+      - ".ant-form"
+      - ".el-form"
+      - ".arco-form"
+      - ".ivu-form"
+      - "form"
+
+    item:
+      selectors:
+        - ".ant-form-item"
+        - ".el-form-item"
+        - ".arco-form-item"
+        - ".ivu-form-item"
+        - "[class*='form-item']"
+
+    label:
+      selectors:
+        - ".ant-form-item-label"
+        - ".el-form-item__label"
+        - ".arco-form-item-label"
+        - "label"
+
+    required_indicator:
+      selectors:
+        - ".ant-form-item-required"
+        - ".el-form-item__label .el-form-item__label--required"
+        - "[class*='required']"
+
+  # 输入控件
+  input:
+    text:
+      - ".ant-input"
+      - ".el-input"
+      - ".arco-input"
+      - "input[type='text']"
+      - "input:not([type])"
+
+    number:
+      - ".ant-input-number"
+      - ".el-input-number"
+      - ".arco-input-number"
+      - "input[type='number']"
+
+    select:
+      - ".ant-select"
+      - ".el-select"
+      - ".arco-select"
+      - "select"
+
+    date:
+      - ".ant-picker"
+      - ".el-date-editor"
+      - ".arco-picker"
+      - "input[type='date']"
+
+    switch:
+      - ".ant-switch"
+      - ".el-switch"
+      - ".arco-switch"
+      - "input[type='checkbox']"
+
+    upload:
+      - ".ant-upload"
+      - ".el-upload"
+      - ".arco-upload"
+      - "input[type='file']"
+
+    textarea:
+      - ".ant-input-textarea"
+      - ".el-textarea"
+      - ".arco-textarea"
+      - "textarea"
+
+  # 分页
+  pagination:
+    selectors:
+      - ".ant-pagination"
+      - ".el-pagination"
+      - ".arco-pagination"
+      - ".ivu-page"
+      - "[class*='pagination']"
+      - "[class*='pager']"
+
+  # 按钮
+  button:
+    selectors:
+      - ".ant-btn"
+      - ".el-button"
+      - ".arco-btn"
+      - ".ivu-btn"
+      - ".layui-btn"
+      - "button"
+      - "[role='button']"
+
+    # 主要按钮
+    primary:
+      - ".ant-btn-primary"
+      - ".el-button--primary"
+      - ".arco-btn-primary"
+      - "[class*='primary']"
+
+    # 危险按钮
+    danger:
+      - ".ant-btn-danger"
+      - ".el-button--danger"
+      - ".arco-btn-status-danger"
+      - "[class*='danger']"
+      - "[class*='delete']"
+
+    # 禁用状态
+    disabled:
+      - ".ant-btn-disabled"
+      - ".el-button.is-disabled"
+      - ".arco-btn-disabled"
+      - "[disabled]"
+      - "[class*='disabled']"
+
+  # 弹窗/对话框
+  modal:
+    selectors:
+      - ".ant-modal"
+      - ".el-dialog"
+      - ".arco-modal"
+      - ".ivu-modal"
+      - "[class*='modal']"
+      - "[class*='dialog']"
+      - "[role='dialog']"
+
+    close_button:
+      - ".ant-modal-close"
+      - ".el-dialog__close"
+      - ".arco-modal-close-btn"
+      - "[class*='close']"
+      - "[aria-label='Close']"
+
+  # 抽屉
+  drawer:
+    selectors:
+      - ".ant-drawer"
+      - ".el-drawer"
+      - ".arco-drawer"
+      - "[class*='drawer']"
+
+  # 标签页
+  tabs:
+    selectors:
+      - ".ant-tabs"
+      - ".el-tabs"
+      - ".arco-tabs"
+      - "[class*='tabs']"
+
+    tab_item:
+      - ".ant-tabs-tab"
+      - ".el-tabs__item"
+      - ".arco-tabs-tab"
+      - "[role='tab']"
+
+  # 卡片
+  card:
+    selectors:
+      - ".ant-card"
+      - ".el-card"
+      - ".arco-card"
+      - "[class*='card']"
+
+# ============================================
+# 页面类型识别
+# ============================================
+page_types:
+  # 列表页
+  list:
+    indicators:
+      - ".ant-table"
+      - ".ant-pro-table"
+      - ".el-table"
+      - "table"
+      - "[class*='list']"
+      - "[class*='table']"
+    priority: 1
+
+  # 详情页
+  detail:
+    indicators:
+      - ".ant-descriptions"
+      - ".el-descriptions"
+      - "[class*='detail']"
+      - "[class*='description']"
+      - "[class*='view']"
+    priority: 2
+
+  # 表单页 (新增/编辑)
+  form:
+    indicators:
+      - "form:not(.ant-form-inline)"
+      - ".ant-form-vertical"
+      - ".el-form:not(.el-form--inline)"
+      - "[class*='edit']"
+      - "[class*='create']"
+      - "[class*='add']"
+    priority: 3
+
+  # Dashboard
+  dashboard:
+    indicators:
+      - ".ant-statistic"
+      - "[class*='dashboard']"
+      - "[class*='statistic']"
+      - "[class*='chart']"
+      - "[class*='echarts']"
+    priority: 4
+
+  # 设置页
+  setting:
+    indicators:
+      - "[class*='setting']"
+      - "[class*='config']"
+      - "[class*='preference']"
+    priority: 5
+
+# ============================================
+# 登录状态检测
+# ============================================
+auth:
+  # 登录页指示器
+  login_page_indicators:
+    - "[class*='login']"
+    - "input[type='password']"
+    - "[placeholder*='密码']"
+    - "[placeholder*='password']"
+    - "[class*='signin']"
+
+  # 已登录指示器
+  logged_in_indicators:
+    - "[class*='avatar']"
+    - "[class*='user-info']"
+    - "[class*='user-dropdown']"
+    - "[class*='header-right']"
+    - ".ant-dropdown-trigger"
+
+  # 无权限页面指示器
+  forbidden_indicators:
+    - "[class*='403']"
+    - "[class*='forbidden']"
+    - "[class*='no-permission']"
+    - "无权限"
+    - "Access Denied"
+
+# ============================================
+# URL 规则
+# ============================================
+url_rules:
+  # 忽略的 URL 模式
+  ignore_patterns:
+    - "/login"
+    - "/signin"
+    - "/register"
+    - "/signup"
+    - "/forgot-password"
+    - "/reset-password"
+    - "/403"
+    - "/404"
+    - "/500"
+    - "/error"
+    - "/logout"
+
+  # API 路径模式 (用于网络请求过滤)
+  api_patterns:
+    - "/api/"
+    - "/v1/"
+    - "/v2/"
+    - "/rest/"
+    - "/graphql"
+
+  # 静态资源 (忽略)
+  static_patterns:
+    - ".js"
+    - ".css"
+    - ".png"
+    - ".jpg"
+    - ".jpeg"
+    - ".gif"
+    - ".svg"
+    - ".ico"
+    - ".woff"
+    - ".woff2"
+    - ".ttf"
+
+# ============================================
+# 操作识别
+# ============================================
+actions:
+  # CRUD 操作关键词
+  create:
+    keywords:
+      - "新增"
+      - "添加"
+      - "新建"
+      - "创建"
+      - "Add"
+      - "Create"
+      - "New"
+
+  read:
+    keywords:
+      - "查看"
+      - "详情"
+      - "View"
+      - "Detail"
+      - "Show"
+
+  update:
+    keywords:
+      - "编辑"
+      - "修改"
+      - "更新"
+      - "Edit"
+      - "Update"
+      - "Modify"
+
+  delete:
+    keywords:
+      - "删除"
+      - "移除"
+      - "Delete"
+      - "Remove"
+
+  # 特殊操作
+  special:
+    enable:
+      - "启用"
+      - "激活"
+      - "Enable"
+      - "Activate"
+    disable:
+      - "禁用"
+      - "停用"
+      - "Disable"
+      - "Deactivate"
+    export:
+      - "导出"
+      - "Export"
+      - "Download"
+    import:
+      - "导入"
+      - "Import"
+      - "Upload"
+    batch:
+      - "批量"
+      - "Batch"
+      - "Bulk"
