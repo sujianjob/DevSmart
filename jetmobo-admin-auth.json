@@ -1,0 +1,138 @@
+{
+  "cookies": [
+    {
+      "name": "_pk_id.97.f525",
+      "value": "c808b924a779eeee.1769764589.",
+      "domain": "itest-clueadmin.jetmobo.com",
+      "path": "/",
+      "expires": 1803719789,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_pk_ses.97.f525",
+      "value": "1",
+      "domain": "itest-clueadmin.jetmobo.com",
+      "path": "/",
+      "expires": 1769766424,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "JSESSIONID",
+      "value": "412318199c1f486bb38809faeca239ae",
+      "domain": "itest-passport.gzjunbo.net",
+      "path": "/",
+      "expires": 1770023791.077486,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "passport_web_did",
+      "value": "7601081041775758266",
+      "domain": ".feishu.cn",
+      "path": "/",
+      "expires": 1801300591.351912,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "passport_trace_id",
+      "value": "7601081041796811706",
+      "domain": ".feishu.cn",
+      "path": "/",
+      "expires": 1801300591.351925,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "QXV0aHpDb250ZXh0",
+      "value": "947cd2d2481148e9bef851a2104e572b",
+      "domain": ".feishu.cn",
+      "path": "/",
+      "expires": 1801300591.351951,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "locale",
+      "value": "zh-CN",
+      "domain": ".feishu.cn",
+      "path": "/",
+      "expires": 1801300591,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "swp_csrf_token",
+      "value": "2664fd89-9ca6-4c8d-8101-4dec4fc10c9e",
+      "domain": ".feishu.cn",
+      "path": "/",
+      "expires": 1771060622.385069,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "t_beda37",
+      "value": "1ad81c9338ff2e26c329afe582ae8c5e7d7841ca51463f57d31e95dcba532e3b",
+      "domain": ".feishu.cn",
+      "path": "/",
+      "expires": 1771060622.385141,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "2y/BGRxDxvPrdKh+Y8giq2IWWEgrs5yuDB2WwdV66k8hA6DwyNbBvQ74cxx9nL/C7601081041775758266",
+      "value": "0d5a16da-8646-4229-8b82-fdd4f39f95bc",
+      "domain": ".feishu.cn",
+      "path": "/",
+      "expires": 1769771822.385162,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "JSESSIONID",
+      "value": "ec71e8d5fa1444f79479790a0a92b267",
+      "domain": "itest-clueadmin.jetmobo.com",
+      "path": "/",
+      "expires": 1772356623.453045,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://itest-clueadmin.jetmobo.com",
+      "localStorage": [
+        {
+          "name": "adminTemplateUserInfo",
+          "value": "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"
+        }
+      ]
+    },
+    {
+      "origin": "https://passport.feishu.cn",
+      "localStorage": [
+        {
+          "name": "isSupportLocalStorage",
+          "value": "true"
+        },
+        {
+          "name": "policy-sdk-config-",
+          "value": "{\"sdkSwitch\":true,\"whiteList\":{\"userAgent\":[{\"pattern\":\"VC\\\\/\\\\d+\\\\.\\\\d+\\\\.\\\\d+[^ ]* Apollyon\\\\/\\\\d+\"},{\"pattern\":\"FeishuRooms|LarkRooms\",\"flags\":\"i\"}],\"locationSearch\":[{\"pattern\":\"vc=true\"}],\"requestUrl\":[{\"pattern\":\"captcha-sg\"},{\"pattern\":\"captcha-us\"},{\"pattern\":\"snssdk.com\"},{\"pattern\":\"zijieapi.com\"},{\"pattern\":\"slardar\"},{\"pattern\":\"mcs-bd\"},{\"pattern\":\"mcs.{{baseDomain}}\"},{\"pattern\":\"applog-bd\"},{\"pattern\":\"/monitor_browser/collect/batch\"},{\"pattern\":\"hubspot.com\"},{\"pattern\":\"bytegoofy.com\"},{\"pattern\":\"bytescm.com\"},{\"pattern\":\"feishucdn.com\"},{\"pattern\":\"pstatp.com\"},{\"pattern\":\"byteimg.com\"},{\"pattern\":\"bytehwm.com\"},{\"pattern\":\"feishupkg.com\"},{\"pattern\":\"larksuitecdn.com\"},{\"pattern\":\"ibytedtos.com\"},{\"pattern\":\"ipstatp.com\"},{\"pattern\":\"ibyteimg.com\"},{\"pattern\":\"byteoversea.com\"},{\"pattern\":\"tosv.boe.byted.org\"},{\"pattern\":\"tosv.byted.org\"},{\"pattern\":\"tosv.boei18n.byted.org\"},{\"pattern\":\"google-analytics.com\"},{\"pattern\":\"googletagmanager.com\"},{\"pattern\":\"google.com\"},{\"pattern\":\"{{baseDomain}}/settings\"},{\"pattern\":\"api.feelgood.cn\"},{\"pattern\":\"feelgood-api.tiktok.com\"},{\"pattern\":\"/obj/larkdeveloperfile\"},{\"pattern\":\"/calendar\"},{\"pattern\":\"staging-openapi-boe.byted.org\"},{\"pattern\":\"vas-boei18n.bytedance.net\"},{\"pattern\":\"vod.volcengineapi.com\"},{\"pattern\":\"volcvod.com\"},{\"pattern\":\"bytedanceapi.com\"},{\"pattern\":\"bytevcloudapi.com\"},{\"pattern\":\"vodupload.com\"},{\"pattern\":\"/video/v1\"},{\"pattern\":\"video-cn-op\"},{\"pattern\":\"meego.{{baseDomain}}\"},{\"pattern\":\"project.{{baseDomain}}\"},{\"pattern\":\"/bff\"},{\"pattern\":\"/m-api\"},{\"pattern\":\"/goapi\"},{\"pattern\":\"bytedance.net\"},{\"pattern\":\"byted.org\"},{\"pattern\":\"www.{{baseDomain}}/api\"},{\"pattern\":\"lark-gateway-boe.bytedance.net\"},{\"pattern\":\"/lgw/csrf_token\"},{\"pattern\":\"mapproxy.bytedance.com\"},{\"pattern\":\"sgpoi.bytedance.com\"},{\"pattern\":\"location.bytedance.com\"},{\"pattern\":\"smb\"},{\"pattern\":\"/ies/speed\"},{\"pattern\":\"/get_domains/v5\"},{\"pattern\":\"ixigua.com\"},{\"pattern\":\"says.{{baseDomain}}\"},{\"pattern\":\"okr.{{baseDomain}}/saasadmin\"},{\"pattern\":\"/people/app-permission-web\"},{\"pattern\":\"next.{{baseDomain}}\"},{\"pattern\":\"perf.{{baseDomain}}/saasadmin\"}],\"shouldInterceptUrl\":[{\"pattern\":\"{{baseDomain}}\"},{\"pattern\":\"feishu-boe.cn\"},{\"pattern\":\"feishu-pre.cn\"},{\"pattern\":\"feishu.cn\"},{\"pattern\":\"feishu-boe.net\"},{\"pattern\":\"feishu-pre.net\"},{\"pattern\":\"feishu.net\"},{\"pattern\":\"larkenterprise.com\"},{\"pattern\":\"larksuite-boe.com\"},{\"pattern\":\"larksuite-pre.com\"},{\"pattern\":\"larksuite.com\"},{\"pattern\":\"larksuite-pre.us\"},{\"pattern\":\"larksuite.us\"},{\"pattern\":\"c360-config-pre.bytedance.net\"},{\"pattern\":\"c360-config.bytedance.net\"},{\"pattern\":\"procurement-pre.bytedance.net\"},{\"pattern\":\"procurement.bytedance.net\"},{\"pattern\":\"procurement-pre.tiktokusds.com\"},{\"pattern\":\"procurement.tiktokusds.com\"},{\"pattern\":\"nebula.bytedance.net\"},{\"pattern\":\"nebula.bytedance.com\"}]},\"featureParams\":{\"dynamic_pointkey_max_cache_size\":10000,\"heartbeatInterval\":30000,\"file_strategy_file_polling_max_tokens\":4,\"report_same_content_duration\":100,\"file_strategy_retry_delay_time\":5000,\"log_delete_filter_policy_set_keys\":[\"FILE_PROTECT\",\"RETENTION_DELETE\"],\"login_restriction_ip_change_debounce\":1000,\"policy_engine_fetch_policy_interval\":300000,\"policy_engine_fast_pass_config\":{\"PointKey_CCM_FILE_DOWNLOAD\":2,\"PointKey_CCM_CREATE_COPY\":2,\"PointKey_CCM_CONTENT_PREVIEW\":2,\"PointKey_CCM_FILE_PREVIEW\":2,\"PointKey_CCM_PRINT\":2,\"PointKey_CCM_CONTENT_COPY\":2,\"PointKey_CCM_EXPORT\":2,\"PointKey_IM_MSG_FILE_READ\":2},\"dlp_fast_pass_period_of_validity\":36000000,\"file_strategy_delay_clean_time\":600000,\"file_strategy_update_frequency_control\":2000,\"secure_label_max_cache_size\":100,\"dlp_period_of_validity\":600000,\"policy_center_pointkeys\":[\"PointKey_CCM_EXPORT\",\"PointKey_CCM_PRINT\",\"PointKey_CCM_ATTACHMENT_DOWNLOADPointKey_CCM_CONTENT_COPY\",\"PointKey_CCM_CONTENT_PREVIEW\",\"PointKey_CCM_CREATE_COPYPointKey_CCM_FILE_PREVIEW\",\"PointKey_CCM_FILE_DOWNLOAD\"],\"support_browsers\":[\"chrome\",\"firefox\",\"edge\"],\"queryConfigInterval\":3600000,\"log_report_filter_policy_set_keys\":[\"FILE_PROTECT\"],\"lru_cache_size\":100,\"dlp_max_check_time\":15,\"custom_display_polling_interval\":7200000,\"login_restriction_logout_delay\":5000,\"file_strategy_delay_clean_inaccuracy\":60000,\"login_restriction_heartbeat_interval\":900000,\"file_strategy_retry_max_count\":2},\"featureSwitch\":{\"disable_file_strategy\":true,\"login_restriction_switch\":false,\"file_protection_policy_device\":false,\"file_protection_secure_labels_tokenize\":false,\"enable_index_factor_policy_type\":true,\"slardar\":true,\"conditional_access_device\":false,\"registerModal\":true,\"enable_logifier\":true,\"sec_native_dialog\":true,\"disable_file_operate\":true,\"os_new\":true,\"web_fingerprint_collect\":false,\"web_did_reset\":false,\"enable_policy_engine\":false,\"file_protection_client\":false,\"sec_custom_display\":true,\"enable_meeting_minutes_file_strategy\":true,\"disable_file_strategy_share\":false,\"signature_check_frontend\":false,\"login_restriction_use_local_dns\":true,\"web_did_check\":false,\"sec_custom_display_cond_access\":true,\"policy_engine_disable_local_validate\":false,\"file_strategy_fallback_result\":true,\"disable_file_strategy_share_cache\":false,\"ccm_dlp_enable\":false,\"heartbeat\":false,\"file_ip_disconnect_deny\":false,\"login_restriction_ip_switch\":true,\"admin_log_utilize_is_enable\":false,\"lgw_sdk_web\":true},\"securityApiDomain\":\"internal-api-security.feishu.cn\",\"securityWebDomain\":\"security.feishu.cn\",\"securityDataDomain\":\"internal-api-security.feishu.cn\",\"passportAccountsDomain\":\"accounts.feishu.cn\",\"passportAccountsDomainNoMg\":\"accounts.feishu.cn\",\"securityLoginRestrictionApiDomain\":\"internal-api-security-tenant-probe.feishu.cn\",\"csrfApiDomain\":\"www.feishu.cn\",\"secSdkWeb\":{\"url\":\"sf1-scmcdn2-cn.feishucdn.com/lmp/scs/sec-sdk/1.0.7.js\",\"token\":\"8f2f3af90e6066eb97f95277336bed69\",\"bdmsConf\":{\"domain\":\"sf3-scmcdn-cn.feishucdn.com/obj/feishu-static\",\"enable\":true,\"path\":\"/web/stable/lark/1.0.1.18/bdms.js\",\"track\":{\"mode\":3},\"aid\":1664,\"backupDomains\":[\"sf1-scmcdn-cn.feishucdn.com/obj/feishu-static\",\"sf6-scmcdn-cn.feishucdn.com/obj/feishu-static\",\"sf3-cn.feishucdn.com/obj/feishu-static\",\"lf-scm-cn.feishucdn.com\"],\"options\":{\"paths\":{\"exclude\":[],\"include\":[\"^/accounts/auth/\",\"^/accounts/login/\",\"^/accounts/page/ug_register\",\"^/accounts/ug_register/\",\"^/accounts/tenant\",\"^/accounts/lite/tenant\",\"^/accounts/retrieve/\",\"^/accounts/auth_login/\",\"^/accounts/auth/code/\",\"^/security/device/captcha/\",\"^/accounts/app\",\"^/accounts/switch_identity\",\"^/accounts/async_switch_identity\",\"^/accounts/web/switch\",\"^/accounts/security/credential\",\"^/accounts/mfa_token\",\"^/accounts/verify_token\",\"^/accounts/qrlogin\",\"^/scheduler/api/\",\"^/suite/admin/department\",\"^/suite/admin/employees\",\"^/okrx/api/okr/owner/list\",\"^/okrx/api/okr/owner/aggr_detail/\"]}},\"slU\":\"https://slardar-bd.feishu.cn\"}},\"bdmsSdkApiDomain\":\"internal-api-security.feishu.cn\",\"sessionDPoP\":{\"whiteList\":[],\"blackList\":[]},\"applink\":\"applink.feishu.cn\",\"helpcenter\":\"www.feishu.cn\",\"domains\":{\"passport_page\":\"login.feishu.cn\",\"slardar_cdn\":\"https://lf3-short.ibytedapm.com/slardar/fe/sdk-web/browser.cn.js\",\"slardar_report\":\"slardar-bd.feishu.cn\",\"tea_report\":\"https://mcs-bd.feishu.cn\"}}"
+        }
+      ]
+    }
+  ]
+}
