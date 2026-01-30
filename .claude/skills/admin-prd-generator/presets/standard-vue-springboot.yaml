@@ -1,0 +1,252 @@
+# Vue + Spring Boot 标准项目预设
+# 适用于：单体应用、标准目录结构
+
+name: standard-vue-springboot
+description: Vue 2.x/3.x + Spring Boot 2.x/3.x 标准项目配置
+version: "1.0"
+
+# ============================================
+# 前端配置
+# ============================================
+frontend:
+  framework: vue
+  # 支持版本: 2.x | 3.x（自动检测）
+  version: auto
+
+  # 目录配置
+  paths:
+    # 路由配置目录
+    router: src/router
+    # 页面组件目录
+    views: src/views
+    # API 定义目录
+    api: src/api
+    # 公共组件目录
+    components: src/components
+    # 状态管理目录（Vuex/Pinia）
+    store: src/store
+
+  # 路由匹配配置
+  routing:
+    # 支持的路由文件模式
+    file_patterns:
+      - "*.js"
+      - "*.ts"
+      - "index.js"
+      - "index.ts"
+
+    # 路由路径提取正则
+    path_regex: "path:\\s*['\"]([^'\"]+)['\"]"
+
+    # 组件路径提取正则
+    component_regex: "component:\\s*\\(\\)\\s*=>\\s*import\\(['\"]([^'\"]+)['\"]\\)"
+
+    # 路径别名映射
+    alias:
+      "@": "src"
+      "@views": "src/views"
+      "@api": "src/api"
+      "@components": "src/components"
+
+  # 组件分析配置
+  component:
+    # 支持的组件文件扩展名
+    extensions:
+      - ".vue"
+      - ".jsx"
+      - ".tsx"
+
+    # 表格组件选择器
+    table_selectors:
+      - "el-table"
+      - "a-table"
+      - "el-table-column"
+      - "a-table-column"
+
+    # 表单组件选择器
+    form_selectors:
+      - "el-form"
+      - "a-form"
+      - "el-form-item"
+      - "a-form-item"
+
+    # 校验规则提取模式
+    rules_pattern: ":rules=\"([^\"]+)\""
+
+  # API 文件分析配置
+  api:
+    # API 函数匹配模式
+    function_patterns:
+      - "export\\s+function\\s+(\\w+)"
+      - "export\\s+const\\s+(\\w+)\\s*="
+
+    # 请求方法识别
+    request_methods:
+      - "request"
+      - "axios"
+      - "http"
+      - "fetch"
+
+# ============================================
+# 后端配置
+# ============================================
+backend:
+  framework: spring-boot
+  # 支持版本: 2.x | 3.x（自动检测）
+  version: auto
+
+  # 基础包名（自动检测）
+  base_package: auto
+
+  # 目录配置
+  paths:
+    # Controller 层目录模式
+    controller: src/main/java/**/controller
+    # Service 层目录模式
+    service: src/main/java/**/service
+    # Repository/DAO 层目录模式
+    repository: src/main/java/**/repository
+    # Entity 实体目录模式
+    entity: src/main/java/**/entity
+    # DTO 目录模式
+    dto: src/main/java/**/dto
+    # VO 目录模式
+    vo: src/main/java/**/vo
+
+  # Controller 分析配置
+  controller:
+    # 类注解识别
+    class_annotations:
+      - "@RestController"
+      - "@Controller"
+
+    # 类级路由注解
+    class_mapping_annotation: "@RequestMapping"
+
+    # 方法级路由注解
+    method_annotations:
+      - "@GetMapping"
+      - "@PostMapping"
+      - "@PutMapping"
+      - "@DeleteMapping"
+      - "@PatchMapping"
+      - "@RequestMapping"
+
+    # 参数注解
+    param_annotations:
+      - "@RequestParam"
+      - "@PathVariable"
+      - "@RequestBody"
+      - "@Valid"
+
+  # Service 分析配置
+  service:
+    # 类注解识别
+    class_annotations:
+      - "@Service"
+      - "@Component"
+
+    # 依赖注入注解
+    injection_annotations:
+      - "@Autowired"
+      - "@Resource"
+      - "@Inject"
+
+  # 校验规则提取
+  validation:
+    # Bean Validation 注解
+    annotations:
+      - "@NotNull"
+      - "@NotBlank"
+      - "@NotEmpty"
+      - "@Size"
+      - "@Min"
+      - "@Max"
+      - "@Pattern"
+      - "@Email"
+      - "@Past"
+      - "@Future"
+
+    # 提取验证消息
+    message_pattern: "message\\s*=\\s*\"([^\"]+)\""
+
+# ============================================
+# 输出配置
+# ============================================
+output:
+  # 文档语言
+  language: zh-CN
+
+  # 详细程度: minimal | standard | full
+  detail_level: standard
+
+  # 是否包含代码片段
+  include_code_snippets: true
+
+  # 代码片段配置
+  code_snippet:
+    max_lines: 20
+    include_comments: true
+
+  # 是否生成代码映射表
+  include_mapping_table: true
+
+  # 文档目录名称
+  directory_name: "05_产品需求"
+
+# ============================================
+# 检索配置
+# ============================================
+search:
+  # 忽略的目录
+  ignore_directories:
+    - node_modules
+    - dist
+    - build
+    - target
+    - .git
+    - .idea
+    - .vscode
+
+  # 忽略的文件
+  ignore_files:
+    - "*.min.js"
+    - "*.map"
+    - "*.lock"
+
+  # 最大文件大小（字节）
+  max_file_size: 1048576  # 1MB
+
+  # 搜索超时（毫秒）
+  timeout: 30000
+
+# ============================================
+# 映射规则
+# ============================================
+mapping:
+  # URL 前缀处理
+  url_prefix:
+    # 移除的前缀
+    remove:
+      - "/#/"
+      - "#/"
+    # 保留的前缀
+    keep:
+      - "/api/"
+
+  # 路由到组件的转换规则
+  route_to_component:
+    # kebab-case 转 PascalCase
+    case_transform: true
+    # 路径分隔符
+    path_separator: "/"
+
+  # API 到 Controller 的匹配
+  api_to_controller:
+    # 是否精确匹配
+    exact_match: false
+    # 允许的前缀差异
+    prefix_tolerance:
+      - "/api/"
+      - "/api/v1/"
+      - "/api/v2/"

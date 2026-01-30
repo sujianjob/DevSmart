@@ -48,6 +48,18 @@ agent-browser close             # 关闭浏览器
 - **人工审核**：生成用例后用户可编辑 `_index.yaml` 启用/禁用用例
 - **断点续测**：自动生成 `.test-state.json` 状态文件
 
+### admin-prd-generator - 产品需求文档生成
+基于 admin-reverse-docs 输出和代码仓库，**深度分析代码实现**，智能生成产品需求说明文档。详见 `.claude/skills/admin-prd-generator/SKILL.md`
+
+**关键概念**：
+- **输入依赖**：需要 admin-reverse-docs 输出 + 前端代码仓库（Vue）+ 后端代码仓库（Spring Boot）
+- **自动逐模块生成**：选择模块后自动分析生成，无需每个模块确认
+- **5 阶段工作流**：初始化 → 模块选择 → 自动分析生成 → 汇总生成 → 审核清单
+- **深度分析**：完整阅读代码，追踪调用链，提取业务规则、状态流转、异常处理
+- **统一审核**：所有模块生成完成后，输出完整 Checklist 供用户一次性确认
+- **输出位置**：在 admin-reverse-docs 目录下新增 `05_产品需求/` 子目录
+- **断点续生成**：自动生成 `.prd-state.json` 状态文件
+
 ## 技能模块结构
 
 ```
