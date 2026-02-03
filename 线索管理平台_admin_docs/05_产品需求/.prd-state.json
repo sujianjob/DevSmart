@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "repositories": [
+    {
+      "path": "/Users/admin/code/DevSmart/code/clue-operate",
+      "type": "fullstack",
+      "frontend_framework": "vue",
+      "frontend_version": "2.7",
+      "backend_framework": "spring-boot",
+      "backend_version": "2.0.3"
+    },
+    {
+      "path": "/Users/admin/code/DevSmart/code/clue-service",
+      "type": "backend",
+      "framework": "spring-boot",
+      "version": "2.0.3"
+    },
+    {
+      "path": "/Users/admin/code/DevSmart/code/clue-vendor",
+      "type": "fullstack",
+      "frontend_framework": "vue",
+      "frontend_version": "2.7",
+      "backend_framework": "spring-boot",
+      "backend_version": "2.0.3"
+    },
+    {
+      "path": "/Users/admin/code/DevSmart/code/clue-web",
+      "type": "backend",
+      "framework": "spring-boot",
+      "version": "2.0.3"
+    },
+    {
+      "path": "/Users/admin/code/DevSmart/code/converter-clue",
+      "type": "backend",
+      "framework": "spring-boot",
+      "version": "2.0.3"
+    }
+  ],
+  "progress": {
+    "completed_modules": ["人员管理", "线索管理", "系统管理"],
+    "current_module": null,
+    "pending_modules": []
+  },
+  "last_action": "completed",
+  "last_updated": "2026-02-03T00:00:00Z"
+}

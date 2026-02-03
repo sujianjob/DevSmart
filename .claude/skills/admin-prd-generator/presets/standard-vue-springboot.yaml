@@ -1,17 +1,102 @@
 # Vue + Spring Boot 标准项目预设
 # 适用于：单体应用、标准目录结构
+# 支持：自动识别代码仓库类型
 
 name: standard-vue-springboot
-description: Vue 2.x/3.x + Spring Boot 2.x/3.x 标准项目配置
-version: "1.0"
+description: Vue 2.x/3.x + Spring Boot 2.x/3.x 标准项目配置（支持自动识别）
+version: "2.0"
+
+# ============================================
+# 代码仓库自动识别配置
+# ============================================
+auto_detect:
+  enabled: true
+
+  # 前端检测规则
+  frontend_detection:
+    # 主要检测文件
+    primary_files:
+      - "package.json"
+
+    # Vue 框架检测
+    vue:
+      dependency_patterns:
+        - "vue"
+        - "vue-router"
+        - "@vue/cli"
+      version_detection:
+        "vue@^3": "3.x"
+        "vue@^2": "2.x"
+        "vue@3": "3.x"
+        "vue@2": "2.x"
+      directory_indicators:
+        - "src/router"
+        - "src/views"
+        - "src/components"
+
+    # React 框架检测
+    react:
+      dependency_patterns:
+        - "react"
+        - "react-dom"
+        - "react-router"
+      version_detection:
+        "react@^18": "18.x"
+        "react@^17": "17.x"
+        "react@^16": "16.x"
+      directory_indicators:
+        - "src/pages"
+        - "src/components"
+        - "src/routes"
+
+  # 后端检测规则
+  backend_detection:
+    # Spring Boot 检测
+    spring_boot:
+      primary_files:
+        - "pom.xml"
+        - "build.gradle"
+      dependency_patterns:
+        - "spring-boot-starter"
+        - "org.springframework.boot"
+      version_detection:
+        pattern: "<version>(\\d+\\.\\d+\\.\\d+)</version>"
+        spring_boot_3: "^3\\."
+        spring_boot_2: "^2\\."
+      directory_indicators:
+        - "**/controller"
+        - "**/service"
+        - "**/repository"
+
+    # Express 检测
+    express:
+      primary_files:
+        - "package.json"
+      dependency_patterns:
+        - "express"
+      directory_indicators:
+        - "routes"
+        - "controllers"
+        - "middleware"
+
+    # FastAPI 检测
+    fastapi:
+      primary_files:
+        - "requirements.txt"
+        - "pyproject.toml"
+      dependency_patterns:
+        - "fastapi"
+        - "uvicorn"
+      directory_indicators:
+        - "routers"
+        - "api"
 
 # ============================================
 # 前端配置
 # ============================================
 frontend:
-  framework: vue
-  # 支持版本: 2.x | 3.x（自动检测）
-  version: auto
+  framework: auto  # 自动检测: vue | react | auto
+  version: auto    # 自动检测版本
 
   # 目录配置
   paths:
@@ -91,9 +176,8 @@ frontend:
 # 后端配置
 # ============================================
 backend:
-  framework: spring-boot
-  # 支持版本: 2.x | 3.x（自动检测）
-  version: auto
+  framework: auto  # 自动检测: spring-boot | express | fastapi | auto
+  version: auto    # 自动检测版本
 
   # 基础包名（自动检测）
   base_package: auto
@@ -169,6 +253,48 @@ backend:
 
     # 提取验证消息
     message_pattern: "message\\s*=\\s*\"([^\"]+)\""
+
+# ============================================
+# Subagent 配置
+# ============================================
+subagent:
+  # 是否启用并行分析
+  parallel_enabled: true
+
+  # 最大并行 Subagent 数量
+  max_parallel: 4
+
+  # Subagent 类型配置
+  types:
+    # 代码仓库识别
+    repo_detection:
+      subagent_type: "general-purpose"
+      model: "haiku"  # 使用轻量模型快速识别
+      timeout: 60000
+
+    # 前端代码分析
+    frontend_analysis:
+      subagent_type: "general-purpose"
+      model: "sonnet"  # 使用主力模型深度分析
+      timeout: 300000
+
+    # 后端代码分析
+    backend_analysis:
+      subagent_type: "general-purpose"
+      model: "sonnet"
+      timeout: 300000
+
+    # 业务规则提取
+    rules_extraction:
+      subagent_type: "general-purpose"
+      model: "sonnet"
+      timeout: 180000
+
+    # 文档生成
+    doc_generation:
+      subagent_type: "general-purpose"
+      model: "haiku"  # 使用轻量模型快速生成
+      timeout: 120000
 
 # ============================================
 # 输出配置

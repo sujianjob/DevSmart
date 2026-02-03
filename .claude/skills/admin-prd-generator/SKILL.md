@@ -1,13 +1,15 @@
 ---
 name: admin-prd-generator
-description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产品需求说明文档。支持 Vue + Spring Boot 技术栈，深度分析代码实现逻辑，自动逐模块生成后统一审核。
+description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产品需求说明文档。自动识别前后端技术栈，使用 subagent 深度分析代码实现逻辑，自动逐模块生成后统一审核。
 ---
 
 # Admin PRD Generator - 产品需求文档生成工具
 
-基于 `admin-reverse-docs` 输出的智能文档生成工具，**深度分析**前后端代码仓库的实现逻辑，生成完整的产品需求说明文档（PRD）。
+基于 `admin-reverse-docs` 输出的智能文档生成工具，**自动识别代码类型**，**使用 subagent 深度分析**前后端代码仓库的实现逻辑，生成完整的产品需求说明文档（PRD）。
 
 **核心理念**：
+- **智能识别**：自动检测代码仓库类型（前端/后端/全栈），无需用户区分
+- **并行分析**：使用 subagent 并发分析多个代码仓库，提高效率
 - 不仅仅是接口映射，而是**深入代码实现**，理解业务逻辑
 - **自动逐模块生成**，完成后统一输出审核清单，用户一次性确认
 
@@ -19,8 +21,7 @@ description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产�
 
 ```
 ✓ admin-reverse-docs 输出目录（包含 01_原始记录、02_数据模型 等）
-✓ 前端代码仓库（Vue 项目）
-✓ 后端代码仓库（Spring Boot 项目）
+✓ 代码仓库路径（一个或多个，自动识别前后端类型）
 ```
 
 ### 2. 提供必要信息
@@ -28,13 +29,20 @@ description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产�
 ```
 请提供以下信息：
 
-1. admin-reverse-docs 输出目录路径：
+1. admin-reverse-docs 输出目录���径：
    示例：./线索管理平台_admin_docs/
 
-2. 前端代码仓库（本地路径或 Git 地址）
-
-3. 后端代码仓库（本地路径或 Git 地址）
+2. 代码仓库路径（支持多个，自动识别类型）：
+   示例：
+   - /path/to/frontend-repo      # 自动识别为 Vue/React 前端
+   - /path/to/backend-repo       # 自动识别为 Spring Boot 后端
+   - /path/to/fullstack-repo     # 自动识别为全栈项目
 ```
+
+**支持的输入方式**：
+- 单个全栈仓库
+- 多个独立仓库（前端 + 后端分离）
+- 微服务架构（多个后端服务仓库）
 
 ---
 
@@ -44,10 +52,13 @@ description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产�
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  阶段一：初始化                                              │
-│  ├─ 验证输入目录和代码仓库                                   │
-│  ├─ 分析项目结构                                            │
-│  └─ 输出：模块清单供用户选择                                 │
+│  阶段一：初始��与代码识别                                    │
+│  ├─ 验证 admin-reverse-docs 输出目录                        │
+│  ├─ 【Subagent】并行扫描所有代码仓库                        │
+│  │   ├─ 自动识别技术栈类型（前端/后端/全栈）                │
+│  │   ├─ 检测框架版本（Vue 2/3, Spring Boot 2/3 等）        │
+│  │   └─ 分析项目结构，定位关键目录                          │
+│  └─ 输出：识别结果 + 模块清单供用户选择                      │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -55,16 +66,16 @@ description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产�
 │  ├─ 用户选择要生成的模块                                     │
 │  ├─ 可选择单个或多个模块                                     │
 │  └─ 默认选择全部模块                                         │
-└─────────────────────────────────────────────────────────────┘
+└───────────────────────────────────���─────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│  阶段三：自动逐模块分析与生成（无需中断）                     │
-│  ├─ 循环处理每个模块：                                       │
-│  │   ├─ 前端代码分析（组件、路由、API 调用）                 │
-│  │   ├─ 后端代码分析（Controller → Service → Repository）   │
-│  │   ├─ 业务规则提取                                        │
-│  │   └─ 生成该模块的全部文档                                 │
-│  └─ 实时显示进度                                            │
+│  阶段三：并行深度分析与生成                                   │
+│  ├─ 【Subagent 并行】每个模块独立分析：                      │
+│  │   ├─ 前端 Subagent：组件、路由、API 调用、表单校验       │
+│  │   ├─ 后端 Subagent：Controller → Service → Repository   │
+│  │   ├─ 业务规则 Subagent：提取校验、状态流转、权限控制     │
+│  │   └─ 文档生成 Subagent：输出该模块的全部文档              │
+│  └─ 主进程协调并显示进度                                     │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -86,7 +97,7 @@ description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产�
 
 ## 详细阶段说明
 
-### 阶段一：初始化
+### 阶段一：初始化与代码识别
 
 **执行内容**：
 
@@ -98,22 +109,58 @@ description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产�
    └── 各模块 README.md        ✓
    ```
 
-2. **验证代码仓库**
-   ```
-   前端仓库：
-   ├── 识别框架：Vue 2.x / Vue 3.x
-   ├── 定位路由：src/router/
-   ├── 定位组件：src/views/
-   └── 定位 API：src/api/
+2. **【Subagent 并行】智能识别代码仓库**
 
-   后端仓库：
-   ├── 识别框架：Spring Boot 2.x / 3.x
-   ├── 定位 Controller
-   ├── 定位 Service
-   └── 定位 Entity/DTO
+   对每个提供的代码路径，启动独立 Subagent 进行分析：
+
+   ```
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   代码仓库识别中...
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   [Subagent-1] 分析: /path/to/repo-a
+      ├─ 检测 package.json → 发现 Vue 3.x
+      ├─ 检测 src/router → 路由目录存在
+      ├─ 检测 src/api → API 目录存在
+      └─ 结论: 【前端】Vue 3.x 项目 ✓
+
+   [Subagent-2] 分析: /path/to/repo-b
+      ├─ 检测 pom.xml → 发现 Spring Boot 2.7
+      ├─ 检测 **/controller → Controller 目录存在
+      ├─ 检测 **/service → Service 目录存在
+      └─ 结论: 【后端】Spring Boot 2.7 项目 ✓
+
+   [Subagent-3] 分析: /path/to/repo-c
+      ├─ 检测 package.json → 发现 Vue 2.x
+      ├─ 检测 pom.xml → 发现 Spring Boot 2.6
+      └─ 结论: 【全栈】Vue 2.x + Spring Boot 2.6 ✓
+
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   识别完成！
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   识别结果汇总：
+   ┌────────────────────────────────────────────┐
+   │  仓库路径              │ 类型    │ 技术栈    │
+   ├────────────────────────────────────────────┤
+   │  /path/to/repo-a       │ 前端    │ Vue 3.x   │
+   │  /path/to/repo-b       │ 后端    │ Spring Boot 2.7 │
+   │  /path/to/repo-c       │ 全栈    │ Vue 2.x + Spring Boot │
+   └────────────────────────────────────────────┘
    ```
 
-3. **输出模块清单**
+3. **识别规则**
+
+   | 类型 | 检测标志 | 判定条件 |
+   |-----|---------|---------|
+   | **Vue 前端** | `package.json` 含 `vue` 依赖 | + `src/router` 或 `src/views` |
+   | **React 前端** | `package.json` 含 `react` 依赖 | + `src/pages` 或 `src/components` |
+   | **Spring Boot** | `pom.xml` 含 `spring-boot` | + `**/controller` 目录 |
+   | **Express** | `package.json` 含 `express` | + `routes/` 或 `controllers/` |
+   | **FastAPI** | `requirements.txt` 含 `fastapi` | + 存在 `@router` 装饰器 |
+   | **全栈** | 同时满足前端+后端条件 | 两者都检测到 |
+
+4. **输出模块清单**
    ```
    发现以下模块：
 
@@ -145,59 +192,70 @@ description: 基于 admin-reverse-docs 输出和代码仓库，智能生成产�
 
 ✓ 已选择：全部 3 个模块
 
-开始自动分析和生成，请稍候...
+开始并行分析和生成，请稍候...
 ```
 
-### 阶段三：自动逐模块分析与生成
+### 阶段三：并行深度分析与生成
 
-**自动处理所有选中的模块，无需中断确认**：
+**使用 Subagent 并行处理所有选中的模块**：
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-处理进度：1/3 - 线索管理
+并行分析中... 模块: 线索管理 | 人员管理 | 系统管理
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-分析前端代码...
-   ├─ 定位路由配置：src/router/modules/clue.js
-   ├─ 分析组件：src/views/clue/MyClue.vue
-   ├─ 分析组件：src/views/clue/ClueForm.vue
-   └─ 分析 API：src/api/clue.js
+[Module-1: 线索管理]
+   [Subagent-Frontend] 分析前端代码...
+      ├─ 定位路由配置：src/router/modules/clue.js
+      ├─ 分析组件：src/views/clue/MyClue.vue
+      ├─ 分析组件：src/views/clue/ClueForm.vue
+      └─ 分析 API：src/api/clue.js
 
-分析后端代码...
-   ├─ 分析 Controller：ClueController.java
-   ├─ 追踪 Service：ClueService.java (12 个方法)
-   ├─ 分析 Repository：ClueRepository.java
-   └─ 提取实体：Clue.java, ClueDTO.java
+   [Subagent-Backend] 分析后端代码...
+      ├─ 分析 Controller：ClueController.java
+      ├─ 追踪 Service：ClueService.java (12 个方法)
+      ├─ 分析 Repository：ClueRepository.java
+      └─ 提取实体：Clue.java, ClueDTO.java
 
-提取业务规则...
-   └─ 提取到 8 条业务规则
+   [Subagent-Rules] 提取业务规则...
+      └─ 提取到 8 条业务规则
 
-生成文档...
-   ├─ 需求概述.md ✓
-   ├─ 功能清单.md ✓
-   ├─ 业务规则.md ✓
-   ├─ 数据流转.md ✓
-   └─ 接口清单.md ✓
+   [Subagent-Docs] 生成文档...
+      ├─ 需求概述.md ✓
+      ├─ 功能清单.md ✓
+      ├─ 业务规则.md ✓
+      ├─ 数据流转.md ✓
+      └─ 接口清单.md ✓
 
-✓ 线索管理 完成
+   ✓ 线索管理 完成
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-处理进度：2/3 - 人员管理
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Module-2: 人员管理]
+   [Subagent-Frontend] 分析前端代码...
+      ├─ 定位路由配置：src/router/modules/personnel.js
+      ...
 
-分析前端代码...
+   [Subagent-Backend] 分析后端代码...
+      ...
+
+   ✓ 人员管理 完成
+
+[Module-3: 系统管理]
    ...
-
-（自动继续处理其他模块）
+   ✓ 系统管理 完成
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-处理进度：3/3 - 系统管理
+所有模块分析完成！
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-...
-
-✓ 系统管理 完成
 ```
+
+**Subagent 分工说明**：
+
+| Subagent | 职责 | 分析内容 |
+|---------|------|---------|
+| **Frontend** | 前端代码分析 | 路由、组件、表单校验、API 调用 |
+| **Backend** | 后端代码分析 | Controller → Service → Repository 调用链 |
+| **Rules** | 业务规则提取 | if/else 条件、异常抛出、状态流转 |
+| **Docs** | 文档生成 | 整合分析结果，输出 Markdown 文档 |
 
 ### 阶段四：汇总生成
 
@@ -316,6 +374,91 @@ PRD 文档生成完成！
 
 ---
 
+## Subagent 实现指南
+
+### 技能执行时的 Subagent 调用方式
+
+在执行此技能时，必须使用 Task 工具调用 Subagent：
+
+```
+1. 代码仓库识别（并行）
+   - 对每个仓库路径启动一个 Subagent
+   - 使用 Task 工具，subagent_type = "general-purpose"
+   - 并行执行：在同一消息中发送多个 Task 调用
+
+2. 模块分析（并行）
+   - 每个模块启动多个 Subagent
+   - Frontend Subagent：分析前端代码
+   - Backend Subagent：分析后端代码
+   - Rules Subagent：提取业务规则
+   - Docs Subagent：生成文档
+
+3. Subagent Prompt 模板示例：
+
+   # 代码仓库识别 Subagent
+   Task prompt: """
+   分析代码仓库: {repo_path}
+
+   请执行以下检测：
+   1. 检查 package.json 是否存在及其 dependencies
+   2. 检查 pom.xml 或 build.gradle 是否存在
+   3. 检查目录结构（src/router, src/views, controller, service 等）
+
+   返回 JSON 格式：
+   {
+     "type": "frontend|backend|fullstack",
+     "frontend_framework": "vue|react|none",
+     "frontend_version": "2.x|3.x|none",
+     "backend_framework": "spring-boot|express|fastapi|none",
+     "backend_version": "版本号",
+     "key_directories": {
+       "router": "路径",
+       "views": "路径",
+       "api": "路径",
+       "controller": "路径",
+       "service": "路径"
+     }
+   }
+   """
+
+   # 前端分析 Subagent
+   Task prompt: """
+   分析前端模块: {module_name}
+   代码路径: {frontend_path}
+   模块路由: {module_routes}
+
+   请分析：
+   1. 路由配置：定位对应的路由文件，提取路由定义
+   2. 组件分析：读取每个组件文件，提取：
+      - 表格列定义（el-table-column）
+      - 表单字段（el-form-item）
+      - 校验规则（rules）
+   3. API 调用：追踪组件中的 API 调用
+
+   返回结构化分析结果。
+   """
+
+   # 后端分析 Subagent
+   Task prompt: """
+   分析后端模块: {module_name}
+   代码路径: {backend_path}
+   API 前缀: {api_prefix}
+
+   请分析：
+   1. Controller：找到对应的 Controller 类，提取所有接口
+   2. Service：追踪 Controller 调用的 Service 方法
+   3. 业务逻辑：深入 Service 方法，提取：
+      - 参数校验（@NotNull, @Valid 等）
+      - 业务规则（if/else 条件、异常抛出）
+      - 状态流转
+   4. 数据层：分析 Repository 和 Entity
+
+   返回结构化分析结果。
+   """
+```
+
+---
+
 ## 断点续生成
 
 支持中断后继续：
@@ -324,6 +467,20 @@ PRD 文档生成完成！
 // .prd-state.json
 {
   "version": "1.0",
+  "repositories": [
+    {
+      "path": "/path/to/repo-a",
+      "type": "frontend",
+      "framework": "vue",
+      "version": "3.x"
+    },
+    {
+      "path": "/path/to/repo-b",
+      "type": "backend",
+      "framework": "spring-boot",
+      "version": "2.7"
+    }
+  ],
   "progress": {
     "completed_modules": ["线索管理", "人员管理"],
     "current_module": null,
@@ -338,6 +495,10 @@ PRD 文档生成完成！
 
 ```
 检测到未完成的任务
+
+识别的代码仓库：
+  ✓ /path/to/repo-a (Vue 3.x 前端)
+  ✓ /path/to/repo-b (Spring Boot 2.7 后端)
 
 已完成模块：
   ✓ 线索管理
@@ -377,7 +538,7 @@ PRD 文档生成完成！
 {系统名}_admin_docs/
 └── 05_产品需求/
     ├── README.md                    # PRD 总览
-    ├── .prd-state.json              # 状态文件
+    ├── .prd-state.json              # 状态文件（含仓库识别信息）
     │
     ├── {模块名}/
     │   ├── 需求概述.md             # 功能概述
