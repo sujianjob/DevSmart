@@ -1,50 +1,54 @@
-# DevSmart - AI-Native 智能研发平台
+# DevSmart
 
-> 打造下一代 AI 原生研发工作流，让协作更智能，让交付更高效。
+DevSmart 是一个 AI 原生的研发流程控制平面。它不做 IDE、代码补全或单一编码 Agent，而是把需求、PRD、任务、上下文、外部 Coding Agent、人工审批、质量建议和审计记录串成一个可控流程。
 
-**DevSmart** 是一个 AI 原生的研发流程控制平面。它不是 IDE、代码补全工具或单一编码 Agent，而是围绕需求、PRD、任务、上下文、外部编码工具、人工审批、质量建议和审计记录进行统一编排的协作平台。
+当前仓库是**文档驱动设计与 POC 规划阶段**，目标是先验证最小闭环，而不是一次性建设完整平台。
 
-当前仓库处于**文档驱动设计与 POC 规划阶段**，核心目标是先验证一个最小闭环：从自然语言需求生成可审批 PRD，再拆解为可交给人类开发者或外部 Coding Agent 执行的结构化任务上下文包。
+## 核心闭环
 
-## 🌟 核心功能 (Core Features)
+```text
+需求输入 -> PRD 生成/澄清 -> 人工审批 -> 任务拆解 -> 上下文包生成 -> 执行结果回收 -> 质量建议 -> 流程回放
+```
 
-### 1. 全局态势感知 (Global Dashboard)
-提供上帝视角的研发效能仪表盘，实时监控项目进度、资源投入及 AI Agent 的活跃状态。
-- **智能研发总览**: 一站式查看项目健康度与关键指标。
-- **深度洞察**: 支持下钻分析，精准定位研发瓶颈。
+## 产品边界
 
-### 2. AI 驱动的需求管理 (AI-Driven Requirements)
-告别繁琐的文档编写，让 AI 成为你的产品助理。
-- **PRD 自动生成**: 仅需输入需求简述，AI 即可生成结构化、高质量的产品需求文档。
-- **智能评审**: 结合人工与 AI 的双重评审机制，确保需求准确无误。
+| 不做 | 做 |
+|:---|:---|
+| IDE 内编码体验 | 研发流程编排 |
+| 代码补全 | PRD、任务和上下文生成 |
+| 自动替代开发者 | 协调人类开发者与外部 Coding Agent |
+| 自动触发 CI/CD | 只读读取 CI 状态并生成建议 |
+| 内部推理过程展示 | 展示可审计执行轨迹 |
 
-### 3. 自动化任务分发 (Auto Task Distribution)
-基于 AI 对需求的理解，自动拆解任务并生成标准化上下文包，分发给最合适的执行者（人类开发者或外部 Coding Agent）。
-- **智能调度**: 根据 Agent 能力模型或开发者画像进行任务匹配。
-- **混合协作**: 无缝连接人类与 AI 的工作流。
+## 30 天 POC
 
-### 4. 智能体治理 (Agent Governance)
-对平台内的“数字员工”进行全生命周期管理。
-- **Agent 管理**: 统一上线、下线及版本管理。
-- **配置与监控**: 精细化控制 Agent 的模型参数、工具权限及资源消耗。
+30 天版本只验证一个问题：DevSmart 能否把一句模糊需求转成可审批 PRD 和可执行任务上下文包。
 
-### 5. 运维与审计 (Operations & Audit)
-保障系统稳定，沉淀团队资产。
-- **流程回放**: 回溯任务的执行轨迹、工具调用、输入输出摘要、审批记录和状态变更。
-- **知识库 (Knowledge Base)**: 沉淀项目文档与最佳实践，持续训练 Agent。
-- **系统设置**: 全局参数与第三方服务集成管理。
+交付物：
 
-## 🚀 快速预览 (Prototype Walkthrough)
+- 任务创建页
+- PRD 审批页
+- 任务拆解页
+- 流程回放页
+- PM Agent 初版
+- Supervisor 状态机
+- 任务上下文包 `task_context.json`
 
-我们为您准备了详细的原型演示文档，展示了上述核心功能的实际交互流程。
+详细计划见 [30 天 POC 详细目标](docs/03-architecture/Thirty_Day_POC_Plan.md)。
 
-👉 **[点击查看 DevSmart 原型与工作流演示](prototype/PROTOTYPE_FLOW.md)**
+## 文档入口
 
-## 🛠️ 技术栈 (Tech Stack)
+- [PRD](PRD.md)：产品单一事实源。
+- [文档地图](docs/README.md)：全部文档导航。
+- [POC 实施计划](docs/03-architecture/POC_Implementation_Plan.md)：近期执行依据。
+- [技术栈总览](docs/03-architecture/Tech_Stack_Overview.md)：技术选型原则。
+- [原型流说明](prototype/PROTOTYPE_FLOW.md)：现有原型资产说明。
 
-- **Frontend**: React + TypeScript + Vite
-- **AI Core**: LangGraph 编排 + 模型路由 + Human-in-the-Loop
-- **Infrastructure**: POC 阶段优先使用轻量本地服务，生产阶段再扩展云原生部署
+## 技术原则
 
----
-*DevSmart Team*
+- 编排：LangGraph。
+- 后端：FastAPI + Pydantic。
+- 前端：React + TypeScript + Vite。
+- 模型：使用模型路由，不在业务逻辑中硬编码具体模型。
+- 部署：POC 先轻量本地服务，生产阶段再评估云原生。
+- CI/CD：按仓库约束，不做自动触发，只做状态读取和人工建议。
