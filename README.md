@@ -2,7 +2,9 @@
 
 > 打造下一代 AI 原生研发工作流，让协作更智能，让交付更高效。
 
-**DevSmart** 是一个集成了全生命周期管理的智能研发平台。它不仅仅是一个项目管理工具，更是一个由 AI Agent 驱动的研发操作系统。通过深度集成 AI 能力，DevSmart 实现了从需求分析、PRD 生成、任务分发到代码开发的自动化与智能化辅助。
+**DevSmart** 是一个 AI 原生的研发流程控制平面。它不是 IDE、代码补全工具或单一编码 Agent，而是围绕需求、PRD、任务、上下文、外部编码工具、人工审批、质量建议和审计记录进行统一编排的协作平台。
+
+当前仓库处于**文档驱动设计与 POC 规划阶段**，核心目标是先验证一个最小闭环：从自然语言需求生成可审批 PRD，再拆解为可交给人类开发者或外部 Coding Agent 执行的结构化任务上下文包。
 
 ## 🌟 核心功能 (Core Features)
 
@@ -17,7 +19,7 @@
 - **智能评审**: 结合人工与 AI 的双重评审机制，确保需求准确无误。
 
 ### 3. 自动化任务分发 (Auto Task Distribution)
-基于 AI 对需求的理解，自动拆解任务并分发给最合适的执行者（无论是人类开发者还是 Coding Agent）。
+基于 AI 对需求的理解，自动拆解任务并生成标准化上下文包，分发给最合适的执行者（人类开发者或外部 Coding Agent）。
 - **智能调度**: 根据 Agent 能力模型或开发者画像进行任务匹配。
 - **混合协作**: 无缝连接人类与 AI 的工作流。
 
@@ -28,7 +30,7 @@
 
 ### 5. 运维与审计 (Operations & Audit)
 保障系统稳定，沉淀团队资产。
-- **历史回放**: 独有的“工作流回放”功能，可追溯 Agent 的每一次决策过程 (Chain of Thought)。
+- **流程回放**: 回溯任务的执行轨迹、工具调用、输入输出摘要、审批记录和状态变更。
 - **知识库 (Knowledge Base)**: 沉淀项目文档与最佳实践，持续训练 Agent。
 - **系统设置**: 全局参数与第三方服务集成管理。
 
@@ -41,8 +43,8 @@
 ## 🛠️ 技术栈 (Tech Stack)
 
 - **Frontend**: React + TypeScript + Vite
-- **AI Core**: Multi-Agent Orchestration Framework
-- **Infrastructure**: Cloud-Native Deployment
+- **AI Core**: LangGraph 编排 + 模型路由 + Human-in-the-Loop
+- **Infrastructure**: POC 阶段优先使用轻量本地服务，生产阶段再扩展云原生部署
 
 ---
 *DevSmart Team*

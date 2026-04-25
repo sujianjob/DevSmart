@@ -31,7 +31,7 @@ sequenceDiagram
         Auth->>Redis: 存储 Session
         Auth-->>API: 生成 JWT
         API-->>Web: 返回 Token + 用户信息
-        Web->>Web: 存储 Token (localStorage)
+        Web->>Web: Access Token 存入内存，Refresh Token 使用 HttpOnly Cookie
         Web-->>User: 跳转到仪表盘
     else OAuth 登录 (GitHub)
         User->>Web: 点击 GitHub 登录
@@ -146,7 +146,7 @@ sequenceDiagram
     participant API as API 服务
     participant PM as PM Agent
     participant RAG as RAG 服务
-    participant LLM as LLM (GPT-4o)
+    participant LLM as LLM (模型路由)
     participant DB as 数据库
 
     User->>Web: 输入需求描述

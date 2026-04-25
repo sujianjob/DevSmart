@@ -30,7 +30,7 @@ graph TD
 *   **Supervisor Agent**: 总控节点，理解用户意图，拆解任务，分发给子 Agent。
 *   **Specialized Agents**: 垂类专家 Agent。
     *   *PM Agent*: 负责需求分析、PRD 生成（**执行器**）。
-    *   *Coder Agent*: 负责任务分发、上下文注入、状态同步（**协调器，不直接写代码**）。
+    *   *Coder Agent*: 负责任务分发、上下文注入、外部 Coding Agent 调度、结果回收和状态同步（**研发任务控制与上下文协调器**）。
     *   *QA Agent*: 负责测试用例生成、Bug 分析（**执行器**）。
 *   **State Manager**: 利用 LangGraph Checkpointer 管理全局状态（Context），支持“时光倒流”和“断点续传”。
 
@@ -41,7 +41,7 @@ graph TD
 | :--- | :--- | :--- |
 | **代码库管理** | `ICodeRepository` | `clone()`, `create_branch()`, `create_pull_request()`, `get_file_content()` |
 | **事项追踪** | `IIssueTracker` | `create_ticket()`, `update_status()`, `get_comments()`, `link_pr()` |
-| **流水线** | `IPipelineProvider` | `trigger_build()`, `get_build_status()`, `get_test_report()` |
+| **流水线状态** | `IPipelineProvider` | `get_build_status()`, `get_test_report()`, `summarize_failure()` |
 | **文档知识** | `IKnowledgeBase` | `search_docs()`, `index_document()`, `retrieve_context()` |
 | **即时通讯** | `IMessenger` | `send_notification()`, `ask_for_approval()` |
 
@@ -49,14 +49,14 @@ graph TD
 *能力的具体实现（Adapter模式），通过 MCP (Model Context Protocol) 或 API 接入。*
 *   **SCM Adapters**: GitHub Adapter, GitLab Adapter, Bitbucket Adapter.
 *   **PM Adapters**: Jira Adapter, Linear Adapter, Trello Adapter.
-*   **CI/CD Adapters**: Jenkins Adapter, GitHub Actions Adapter.
+*   **CI 状态读取 Adapters**: Jenkins Adapter, GitHub Actions Adapter, GitLab CI Adapter。POC 阶段只读接入，不自动触发构建、测试、发布。
 *   **Environment**: Docker Sandbox (用于安全执行代码), K8s Client.
 
 ### 2.5 知识基础设施 (Knowledge Infrastructure)
 *系统的长期记忆与知识底座。*
 *   **Vector DB (语义记忆)**: 存储需求文档、历史 Bug、技术方案的 Embedding (Chroma/Milvus)。
 *   **Code Graph (结构记忆)**: 基于 AST 分析的代码调用关系图 (Neo4j)，用于精准的代码导航与重构分析。
-*   **Trace Store (过程记忆)**: 存储 Agent 的所有思考过程与操作日志 (LangSmith)，用于审计与优化。
+*   **Trace Store (过程记忆)**: 存储工具调用、输入输出摘要、审批记录、状态变更和关键产物，用于审计与优化。
 
 ---
 
@@ -106,14 +106,14 @@ graph TD
 *   **输出**：结构化 PRD (Markdown/JSON)，包含验收标准 (Acceptance Criteria)。
 
 #### 💻 Coder Agent (开发协调智能体)
-*   **定位**：**协调器 (Coordinator)** 而非执行器，**不直接编写代码**。
+*   **定位**：**研发任务控制与上下文协调器**。DevSmart 不做 IDE 内编码体验，但可以调度人类开发者或外部 Coding Agent，并负责上下文供给、审批治理、结果回收和审计记录。
 *   **核心职责**：
-    *   *任务分发*：将拆解后的 Task 转换为标准指令，分发给外部 **Code CLI**（如 Cursor CLI、Copilot CLI）或通过 IDE 插件通知人类开发者。
+    *   *任务分发*：将拆解后的 Task 转换为标准指令，分发给外部 **Code CLI**（如 Cursor CLI、Copilot CLI、Claude Code、Codex）或通知人类开发者。
     *   *上下文注入*：自动为任务附加必要的 RAG 上下文（相关代码文件、架构规范、接口定义、历史讨论）。
-    *   *状态同步*：监听外部工具的执行结果（Commit/PR），实时更新任务状态到系统看板。
+    *   *状态同步*：监听外部工具或人类开发者的执行结果（Commit/PR/结果摘要），实时更新任务状态到系统看板。
     *   *质量把关*：触发 Code Review 流程，收集反馈并决定是否需要返工。
 
-> **重要说明**：Coder Agent 的价值在于"编排"而非"编码"。它是人类开发者和 AI 编码工具之间的桥梁，确保任务有充分的上下文、结果有完整的追踪。具体的代码生成工作由外部专业工具（如 Cursor、GitHub Copilot）完成。
+> **重要说明**：Coder Agent 的价值在于任务控制、上下文供给和审计治理，而不是替代 IDE。具体代码可以由人类开发者或外部 Coding Agent 完成，DevSmart 负责让任务输入充分、执行过程可控、结果可追踪。
 
 #### 🔍 QA Agent (质量守门员)
 *   **工具**：对接外部测试平台 (Test Platform), CI 流水线。

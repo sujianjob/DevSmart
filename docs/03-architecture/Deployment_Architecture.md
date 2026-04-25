@@ -604,7 +604,7 @@ data:
   LOG_LEVEL: debug
   DATABASE_POOL_SIZE: "5"
   REDIS_POOL_SIZE: "5"
-  LLM_MODEL: gpt-4o-mini  # 使用较便宜模型
+  LLM_MODEL_ROUTE: low_cost  # 通过模型路由选择低成本模型
   RATE_LIMIT_REQUESTS: "1000"
   RATE_LIMIT_PERIOD: "1m"
 ```
@@ -831,33 +831,37 @@ spec:
 
 ## 8. 部署流程
 
-### 8.1 CI/CD 流水线
+### 8.1 人工部署与 CI 状态读取
+
+根据仓库约束，DevSmart 不设计自动化 CI/CD 触发流程。构建、测试、发布必须由人工操作；系统可读取外部 CI 状态、测试结果和安全扫描摘要，用于生成质量建议和审计记录。
 
 ```mermaid
 graph LR
-    subgraph CI["持续集成"]
-        Push["Git Push"]
-        Build["构建镜像"]
-        Test["运行测试"]
-        Scan["安全扫描"]
-        Push2["推送镜像"]
+    subgraph Manual["人工操作"]
+        Build["人工构建镜像"]
+        Test["人工运行测试"]
+        Scan["人工执行安全扫描"]
+        Push2["人工推送镜像"]
     end
 
-    subgraph CD["持续部署"]
-        ArgoCD["ArgoCD 检测"]
-        Sync["同步配置"]
-        Deploy["滚动部署"]
+    subgraph Observe["DevSmart 只读观察"]
+        ReadCI["读取 CI 状态"]
+        Summarize["生成质量摘要"]
+        Audit["写入审计事件"]
+    end
+
+    subgraph DeployFlow["人工部署"]
+        Deploy["人工触发滚动部署"]
         Verify["健康检查"]
     end
 
-    Push --> Build
     Build --> Test
     Test --> Scan
     Scan --> Push2
-    Push2 --> ArgoCD
-    ArgoCD --> Sync
-    Sync --> Deploy
+    Push2 --> Deploy
     Deploy --> Verify
+    ReadCI --> Summarize
+    Summarize --> Audit
 ```
 
 ### 8.2 滚动更新策略
@@ -878,16 +882,16 @@ spec:
 ```mermaid
 sequenceDiagram
     participant Dev as 开发者
-    participant Argo as ArgoCD
+    participant Ops as 运维负责人
     participant K8s as Kubernetes
     participant Mon as 监控
 
-    Dev->>Argo: 触发部署
-    Argo->>K8s: 滚动更新
+    Dev->>Ops: 提交回滚申请
+    Ops->>K8s: 人工触发滚动更新
     K8s->>Mon: 上报指标
     Mon-->>Dev: 错误告警
-    Dev->>Argo: 执行回滚
-    Argo->>K8s: 恢复上一版本
+    Dev->>Ops: 确认回滚
+    Ops->>K8s: 恢复上一版本
     K8s-->>Dev: 回滚完成
 ```
 

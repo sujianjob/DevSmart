@@ -78,7 +78,7 @@ graph TB
 
 | Token 类型 | 有效期 | 用途 | 存储位置 |
 |:---|:---|:---|:---|
-| Access Token | 15 分钟 | API 访问 | 内存 / localStorage |
+| Access Token | 15 分钟 | API 访问 | 前端内存（禁止 localStorage 持久化） |
 | Refresh Token | 7 天 | 刷新 Access Token | HttpOnly Cookie |
 | API Key | 永久 (可撤销) | 程序化访问 | 服务端 |
 
@@ -975,7 +975,7 @@ graph LR
   "duration_ms": 1523,
   "extra": {
     "prd_id": "prd_uuid",
-    "model": "gpt-4o",
+    "model": "reasoning-model",
     "tokens_used": 2500
   }
 }
@@ -1099,7 +1099,7 @@ async def generate_prd(request: PRDGenerateRequest):
 
         # LLM 调用
         with tracer.start_span("llm_call") as child_span:
-            child_span.set_attribute("model", "gpt-4o")
+            child_span.set_attribute("model", selected_model)
             result = await llm_service.generate(request, context)
             child_span.set_attribute("tokens_used", result.tokens)
 

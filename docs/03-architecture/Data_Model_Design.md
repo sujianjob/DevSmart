@@ -274,7 +274,7 @@ Agent 实例配置，每个团队可自定义 Agent 参数。
 | `team_id` | UUID | FK → Team, NOT NULL | 所属团队 |
 | `type` | ENUM | NOT NULL | 类型：`pm`/`coder`/`qa`/`designer`/`supervisor`/`ops` |
 | `name` | VARCHAR(100) | NOT NULL | 显示名称（如 "PM-01"） |
-| `model` | VARCHAR(100) | NOT NULL | LLM 模型（gpt-4o/claude-3-opus/etc） |
+| `model` | VARCHAR(100) | NOT NULL | LLM 模型标识（由模型路由配置写入，避免业务逻辑硬编码具体模型） |
 | `config` | JSONB | - | Agent 特定配置 |
 | `is_active` | BOOLEAN | NOT NULL, DEFAULT true | 是否启用 |
 | `status` | ENUM | NOT NULL, DEFAULT 'idle' | 运行状态：`idle`/`running`/`paused`/`error` |

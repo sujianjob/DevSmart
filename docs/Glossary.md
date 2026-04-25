@@ -9,7 +9,7 @@
 | 术语 | 英文全称 | 定义 | 角色定位 |
 |:---|:---|:---|:---|
 | **PM Agent** | Product Manager Agent | 产品经理智能体，负责需求分析和文档生成 | **执行器** - 生成 PRD、需求澄清、竞品分析 |
-| **Coder Agent** | Coder Coordinator Agent | 开发协调智能体，负责任务编排和状态同步 | **协调器** - 任务分发、上下文注入、状态同步；**不直接写代码** |
+| **Coder Agent** | Coder Coordinator Agent | 开发协调智能体，负责任务控制、上下文供给、外部 Coding Agent 调度、结果回收和状态同步 | **协调器** - 不做 IDE 内编码体验，负责让任务输入充分、执行过程可控、结果可追踪 |
 | **QA Agent** | Quality Assurance Agent | 质量保障智能体，负责测试策略和质量把控 | **执行器** - 测试用例生成、回归范围筛选、测试报告分析 |
 | **Designer Agent** | UI/UX Designer Agent | 设计智能体，负责原型和设计规范 | **执行器** - 原型生成、设计规范检查、UI 一致性校验 |
 | **Supervisor Agent** | Supervisor Agent | 总控智能体，系统的"大脑" | **协调器** - 语义路由、任务拆解、全局监控、跨 Agent 协同 |
@@ -97,7 +97,7 @@
 |:---|:---|
 | **SCM Adapter** | 代码仓库适配器（GitHub、GitLab、Bitbucket） |
 | **PM Adapter** | 项目管理工具适配器（Jira、Linear、Trello） |
-| **CI/CD Adapter** | 持续集成/部署适配器（Jenkins、GitHub Actions） |
+| **CI 状态读取 Adapter** | 持续集成状态读取适配器（Jenkins、GitHub Actions、GitLab CI），只读接入，不自动触发构建、测试、发布 |
 | **Vector DB** | 向量数据库，存储语义 Embedding（Chroma、Milvus） |
 | **Code Graph** | 代码关系图谱，基于 AST 分析（Neo4j） |
 
@@ -114,4 +114,4 @@
 | AST | Abstract Syntax Tree | 抽象语法树 |
 | ADR | Architecture Decision Record | 架构决策记录 |
 | SDLC | Software Development Life Cycle | 软件开发生命周期 |
-| CI/CD | Continuous Integration/Continuous Deployment | 持续集成/持续部署 |
+| CI/CD | Continuous Integration/Continuous Deployment | 持续集成/持续部署；DevSmart POC 阶段只读取状态，不自动触发流水线 |

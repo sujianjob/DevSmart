@@ -8,24 +8,24 @@
 
 | 层级 | 技术 | 版本 | 说明 | 选型理由 |
 |:---|:---|:---|:---|:---|
-| **前端** | React | 19.x | UI 框架 | 生态成熟，Server Components 支持 |
+| **前端** | React | 19.x | UI 框架 | 生态成熟，适合构建交互式控制台 |
 | **前端** | TypeScript | 5.x | 类型系统 | 类型安全，提升代码质量 |
 | **前端** | Vite | 7.x | 构建工具 | 快速 HMR，原生 ESM 支持 |
 | **前端** | TailwindCSS | 4.x | 样式框架 | 原子化 CSS，快速开发 |
 | **前端** | Zustand | 5.x | 状态管理 | 轻量，TypeScript 友好 |
 | **后端** | Python | 3.11+ | 运行时 | AI/ML 生态支持 |
-| **后端** | FastAPI | 0.128+ | Web 框架 | 高性能，自动 API 文档 |
-| **后端** | LangGraph | 1.0+ | Agent 编排 | 状态图，检查点生态，Platform 支持 |
-| **后端** | LangChain | 1.2+ | LLM 框架 | UUID7 追踪，摘要增强，RAG 支持 |
+| **后端** | FastAPI | 最新稳定版 | Web 框架 | 高性能，自动 API 文档 |
+| **后端** | LangGraph | 最新稳定版 | Agent 编排 | 状态图、检查点、HITL、持久化恢复 |
+| **后端** | LangChain | 最新稳定版 | LLM 集成 | 模型接入、提示模板、工具调用 |
 | **后端** | Pydantic | 2.x | 数据验证 | 类型安全，FastAPI 集成 |
 | **数据库** | PostgreSQL | 16+ | 主数据库 | JSONB 支持，可靠性高 |
 | **数据库** | Redis | 7+ | 缓存/消息 | 高性能缓存，Pub/Sub |
 | **向量库** | Chroma | 0.5+ | 语义检索 | 轻量，易于部署 |
 | **向量库** | Milvus | 2.4+ | 语义检索(生产) | 高性能，分布式支持 |
 | **图数据库** | Neo4j | 5.x | 代码图谱 | 图查询优化，可视化 |
-| **LLM** | OpenAI GPT-4o | - | 商业模型 | 综合能力强 |
-| **LLM** | Claude 3.5 Sonnet | - | 商业模型 | 代码生成优秀 |
-| **LLM** | DeepSeek V3 | - | 开源模型 | 成本效益，中文支持 |
+| **LLM** | 通用推理模型 | 实施时锁定 | PRD 生成、需求澄清 | 通过模型路由选择，不硬编码具体模型 |
+| **LLM** | 代码理解模型 | 实施时锁定 | 任务上下文、代码影响分析 | 优先选择长上下文和代码能力强的模型 |
+| **LLM** | 低成本模型 | 实施时锁定 | 分类、摘要、格式化 | 控制 Token 成本 |
 | **容器** | Docker | 24+ | 容器化 | 标准化部署 |
 | **编排** | Kubernetes | 1.29+ | 容器编排 | 弹性伸缩，高可用 |
 | **网关** | Traefik | 3.x | API 网关 | 自动服务发现，中间件 |
@@ -47,7 +47,7 @@ graph TB
     end
 
     subgraph API["API 层"]
-        FastAPI["REST API<br/>FastAPI 0.128+"]
+        FastAPI["REST API<br/>FastAPI 最新稳定版"]
         GraphQL["GraphQL API<br/>(Future: Strawberry)"]
     end
 
@@ -98,7 +98,7 @@ graph TB
 
 | 技术 | 版本 | 用途 | 配置说明 |
 |:---|:---|:---|:---|
-| React | 19.x | UI 组件框架 | 启用 Concurrent Mode |
+| React | 19.x | UI 组件框架 | POC 阶段采用 Vite SPA，暂不引入 Server Components |
 | TypeScript | 5.x | 类型系统 | strict 模式 |
 | Vite | 7.x | 构建打包 | 开发/生产双配置 |
 
@@ -167,7 +167,7 @@ graph LR
 | 技术 | 版本 | 用途 | 关键特性 |
 |:---|:---|:---|:---|
 | Python | 3.11+ | 运行时 | 类型提示，性能优化 |
-| FastAPI | 0.128+ | Web 框架 | 自动文档，依赖注入 |
+| FastAPI | 最新稳定版 | Web 框架 | 自动文档，依赖注入 |
 | Uvicorn | 0.30+ | ASGI 服务器 | 高并发，HTTP/2 |
 | Pydantic | 2.x | 数据验证 | 高性能序列化 |
 
@@ -177,7 +177,7 @@ graph LR
 |:---|:---|:---|
 | asyncio | 内置 | 异步运行时 |
 | httpx | 0.27+ | 异步 HTTP 客户端 |
-| aioredis | 2.x | 异步 Redis |
+| redis-py asyncio | 最新稳定版 | 异步 Redis |
 | asyncpg | 0.29+ | 异步 PostgreSQL |
 
 ### 4.3 后端架构图
@@ -220,18 +220,20 @@ graph TB
 
 | 技术 | 版本 | 用途 | 关键特性 |
 |:---|:---|:---|:---|
-| LangGraph | 1.0+ | Agent 编排 | 状态图、检查点生态、Platform 支持 |
-| LangChain | 1.2+ | LLM 集成 | 提示模板、链、工具、UUID7 追踪 |
+| LangGraph | 最新稳定版 | Agent 编排 | 状态图、检查点、HITL、持久化恢复 |
+| LangChain | 最新稳定版 | LLM 集成 | 提示模板、工具调用、模型接入 |
 | LangSmith | - | 可观测性 | 追踪、评估、监控 |
 
-### 5.2 LLM 提供商
+### 5.2 LLM 模型路由
 
-| 提供商 | 模型 | 用途 | 特点 |
-|:---|:---|:---|:---|
-| OpenAI | GPT-4o | 通用任务 | 综合能力强，多模态 |
-| OpenAI | GPT-4o-mini | 简单任务 | 成本低，响应快 |
-| Anthropic | Claude 3.5 Sonnet | 代码生成 | 代码质量高，上下文长 |
-| DeepSeek | V3 | 备选方案 | 开源，中文优化 |
+POC 阶段不在业务逻辑中硬编码具体模型名称，而是按任务类型配置模型路由。实施时必须锁定依赖版本和模型版本，并记录验证日期。
+
+| 能力层 | 用途 | 选择原则 |
+|:---|:---|:---|
+| 通用推理模型 | PRD 生成、需求澄清、评审摘要 | 综合推理能力强，中文输出稳定 |
+| 代码理解模型 | 任务上下文、代码影响分析、PR 摘要 | 长上下文、代码理解能力强 |
+| 低成本模型 | 分类、摘要、格式化、状态归纳 | 成本低、响应快、结构化输出稳定 |
+| 私有化模型 | 私有部署、敏感项目 | 支持本地或专有云部署 |
 
 ### 5.3 RAG 技术栈
 
@@ -265,9 +267,9 @@ graph TB
     end
 
     subgraph LLM["LLM 层"]
-        GPT4["GPT-4o"]
-        Claude["Claude 3.5"]
-        DeepSeek["DeepSeek V3"]
+        Reasoning["通用推理模型"]
+        CodeModel["代码理解模型"]
+        LowCost["低成本模型"]
     end
 
     Supervisor --> PM
@@ -276,16 +278,16 @@ graph TB
     Supervisor --> Designer
 
     PM --> RAG
-    PM --> GPT4
+    PM --> Reasoning
 
     Coder --> CodeGraph
     Coder --> ExternalAPI
-    Coder --> Claude
+    Coder --> CodeModel
 
     QA --> RAG
-    QA --> GPT4
+    QA --> Reasoning
 
-    Designer --> GPT4
+    Designer --> Reasoning
 ```
 
 ---
@@ -301,13 +303,16 @@ graph TB
 | Kubernetes | 1.29+ | 生产环境编排 |
 | Helm | 3.x | K8s 包管理 |
 
-### 6.2 CI/CD
+### 6.2 CI 状态读取
+
+根据仓库约束，DevSmart POC 不自动触发 CI/CD、构建、测试、发布。系统只读取外部流水线状态，生成质量建议和人工执行清单。
 
 | 技术 | 用途 |
 |:---|:---|
-| GitHub Actions | CI/CD 流水线 |
-| ArgoCD | GitOps 部署 |
-| Trivy | 安全扫描 |
+| GitHub Actions API | 读取流水线状态、测试结果和失败摘要 |
+| Jenkins API | 读取构建状态和日志摘要 |
+| GitLab CI API | 读取 Pipeline 状态 |
+| Trivy | 生成安全扫描建议，POC 阶段不自动执行 |
 
 ### 6.3 可观测性
 
@@ -323,9 +328,9 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph CI_CD["CI/CD"]
-        GHA["GitHub Actions"]
-        ArgoCD["ArgoCD"]
+    subgraph CI_CD["CI 状态读取"]
+        GHA["GitHub Actions API"]
+        Jenkins["Jenkins API"]
     end
 
     subgraph K8s["Kubernetes 集群"]
@@ -347,8 +352,8 @@ graph TB
         MinIO[(MinIO)]
     end
 
-    GHA --> ArgoCD
-    ArgoCD --> K8s
+    GHA --> Services
+    Jenkins --> Services
     K8s --> Storage
     K8s --> Observability
     Prometheus --> Grafana
@@ -364,11 +369,11 @@ graph TB
 
 | 组件 A | 组件 B | 兼容版本 | 说明 |
 |:---|:---|:---|:---|
-| Python 3.11+ | FastAPI 0.128+ | ✅ | 推荐组合 |
-| Python 3.11+ | LangChain 1.2+ | ✅ | 需要 3.9+ |
-| LangGraph 1.0+ | LangChain 1.2+ | ✅ | 版本需匹配 |
+| Python 3.11+ | FastAPI 最新稳定版 | ✅ | 实施时锁定具体版本 |
+| Python 3.11+ | LangChain 最新稳定版 | ✅ | 实施时锁定具体版本 |
+| LangGraph 最新稳定版 | LangChain 最新稳定版 | ✅ | 版本需匹配并记录验证日期 |
 | PostgreSQL 16+ | asyncpg 0.29+ | ✅ | 完整支持 |
-| Redis 7+ | aioredis 2.x | ✅ | 推荐组合 |
+| Redis 7+ | redis-py asyncio | ✅ | 替代过时的 aioredis 独立包 |
 | React 19 | TypeScript 5.x | ✅ | 完整支持 |
 | Vite 7.x | React 19 | ✅ | 官方支持 |
 
@@ -389,7 +394,7 @@ graph TB
 
 | 服务 | 用途 | 替代方案 | 费用模式 |
 |:---|:---|:---|:---|
-| OpenAI API | LLM 推理 | Claude, DeepSeek | 按 Token 计费 |
+| LLM Provider API | LLM 推理 | OpenAI, Claude, DeepSeek, 私有化模型 | 按 Token 或部署资源计费 |
 | GitHub OAuth | 用户认证 | Google OAuth | 免费 |
 
 ### 8.2 可选服务

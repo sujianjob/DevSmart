@@ -284,7 +284,7 @@ X-Request-ID: <uuid>  # 可选，用于请求追踪
     "content": { ... },
     "generated_by": "ai",
     "generation_meta": {
-      "model": "gpt-4o",
+      "model": "reasoning-model",
       "tokens_used": 2500,
       "duration_ms": 8000
     }
@@ -538,7 +538,7 @@ X-Request-ID: <uuid>  # 可选，用于请求追踪
   "team_id": "uuid",
   "type": "coder",
   "name": "Coder-01",
-  "model": "gpt-4o",
+  "model": "code-model",
   "config": {
     "temperature": 0.3,
     "max_tokens": 4096,
