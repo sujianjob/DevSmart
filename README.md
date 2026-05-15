@@ -44,6 +44,38 @@ DevSmart 是一个 AI 原生的研发流程控制平面。它不做 IDE、代码
 - [技术栈总览](docs/03-architecture/Tech_Stack_Overview.md)：技术选型原则。
 - [原型流说明](prototype/PROTOTYPE_FLOW.md)：现有原型资产说明。
 
+## 本地开发
+
+> 约束声明：仓库不启用自动 CI/CD；构建、测试、发布均为人工执行。
+
+### 1) 手动启动后端
+
+```bash
+bash scripts/dev-backend.sh
+```
+
+### 2) 手动启动前端
+
+```bash
+bash scripts/dev-frontend.sh
+```
+
+### 3) 可选：写入演示数据
+
+```bash
+bash scripts/mock-demo.sh
+```
+
+该脚本会在 `demo/mock-demo-data.json` 写入本地演示数据，便于快速走通演示链路。
+
+### 4) 演示路径
+
+按照以下路径演示完整流程：
+
+```text
+创建任务 -> 审批 -> 拆解 -> 回放
+```
+
 ## 技术原则
 
 - 编排：LangGraph。
