@@ -1,10 +1,21 @@
+"""PRD 模型定义。"""
+
 from datetime import datetime
 
 from pydantic import BaseModel, Field
 
 
+class PRD(BaseModel):
+    """产品需求文档摘要。"""
+
+    task_id: str = Field(..., description="关联任务 ID")
+    background: str = Field(default="", description="需求背景")
+    objective: str = Field(default="", description="目标说明")
+    scope: str = Field(default="", description="范围定义")
+
+
 class PRDSchema(BaseModel):
-    """PRD 数据模型。"""
+    """用于前后端联调的 PRD 数据模型。"""
 
     prd_id: str = Field(..., description="PRD 唯一标识")
     task_id: str = Field(..., description="所属任务标识")
