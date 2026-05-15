@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from backend.app.models.workflow_event import WorkflowEvent
-from backend.app.workflow.supervisor import WorkflowStatus, WorkflowSupervisor
+from app.models.workflow_event import WorkflowStateEvent
+from app.workflow.supervisor import WorkflowStatus, WorkflowSupervisor
 
 
 @dataclass(slots=True)
@@ -24,7 +24,7 @@ class WorkflowRepository(Protocol):
 
     def save_task_status(self, task_id: str, status: str) -> None: ...
 
-    def add_workflow_event(self, event: WorkflowEvent) -> None: ...
+    def add_workflow_event(self, event: WorkflowStateEvent) -> None: ...
 
 
 class WorkflowService:
@@ -70,7 +70,7 @@ class WorkflowService:
         next_status = WorkflowSupervisor.transition(task.status, target_status.value)
         self._repository.save_task_status(task_id, next_status.value)
 
-        event = WorkflowEvent.build(
+        event = WorkflowStateEvent.build(
             task_id=task_id,
             event_type="workflow_state_changed",
             actor=actor,
@@ -87,7 +87,7 @@ class InMemoryWorkflowRepository:
 
     def __init__(self) -> None:
         self.tasks: dict[str, WorkflowTask] = {}
-        self.events: list[WorkflowEvent] = []
+        self.events: list[WorkflowStateEvent] = []
 
     def get_task(self, task_id: str) -> WorkflowTask:
         if task_id not in self.tasks:
@@ -98,5 +98,5 @@ class InMemoryWorkflowRepository:
         task = self.get_task(task_id)
         self.tasks[task_id] = WorkflowTask(task_id=task.task_id, status=status)
 
-    def add_workflow_event(self, event: WorkflowEvent) -> None:
+    def add_workflow_event(self, event: WorkflowStateEvent) -> None:
         self.events.append(event)

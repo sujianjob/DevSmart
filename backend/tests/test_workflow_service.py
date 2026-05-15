@@ -1,7 +1,7 @@
 """工作流服务测试。"""
 
-from backend.app.services.workflow_service import InMemoryWorkflowRepository, WorkflowService, WorkflowTask
-from backend.app.workflow.supervisor import WorkflowStatus, WorkflowTransitionError
+from app.services.workflow_service import InMemoryWorkflowRepository, WorkflowService, WorkflowTask
+from app.workflow.supervisor import WorkflowStatus, WorkflowTransitionError
 
 
 def _build_service() -> tuple[WorkflowService, InMemoryWorkflowRepository]:
