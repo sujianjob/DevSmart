@@ -1,73 +1,77 @@
-# API 规格
+# 输出结构规格
 
-## POC API
+> 本文件不定义技术 API。它只定义 POC 阶段产品输出内容的结构，便于前后端和文档保持一致。
 
-| 方法 | 路径 | 用途 |
-|:---|:---|:---|
-| `POST` | `/tasks` | 创建需求任务 |
-| `GET` | `/tasks/{task_id}` | 查询任务详情 |
-| `GET` | `/tasks/{task_id}/events` | 读取任务事件 |
-| `POST` | `/tasks/{task_id}/approve` | 批准当前 PRD |
-| `POST` | `/tasks/{task_id}/reject` | 驳回当前 PRD |
-| `GET` | `/tasks/{task_id}/context-packages` | 获取上下文包 |
-
-## 创建任务
-
-请求：
+## 需求输入
 
 ```json
 {
-  "requirement": "支持团队成员邮箱邀请",
-  "project_context": {
-    "tech_stack": ["React", "FastAPI"],
-    "constraints": ["必须支持邀请过期"]
-  }
+  "raw_requirement": "支持团队成员邮箱邀请",
+  "template": "feature_prd",
+  "extra_context": "面向 SaaS 后台管理员"
 }
 ```
 
-响应：
+## 澄清问题
 
 ```json
 {
-  "task_id": "task_001",
-  "status": "created"
+  "questions": [
+    {
+      "priority": "must",
+      "question": "谁可以邀请团队成员？",
+      "reason": "缺少角色和权限边界"
+    }
+  ]
 }
 ```
 
-## 审批 PRD
+## PRD 输出
 
 ```json
 {
-  "approved": true,
-  "comments": "同意进入任务拆解"
+  "title": "团队成员邮箱邀请",
+  "background": "当前团队成员添加依赖人工沟通，效率低且易遗漏。",
+  "goals": ["管理员可以通过邮箱邀请成员加入团队"],
+  "user_stories": ["作为管理员，我希望通过邮箱邀请成员，以便快速扩充团队。"],
+  "scope": ["邀请入口", "邮箱输入", "邀请状态", "过期处理"],
+  "non_goals": ["不支持批量导入"],
+  "open_questions": ["邀请有效期是否固定为 7 天？"]
 }
 ```
 
-## 驳回 PRD
+## AC 输出
 
 ```json
 {
-  "reason": "缺少重复邀请处理",
-  "comments": "请补充邀请过期、重复邀请和权限边界"
+  "items": [
+    {
+      "scenario": "成功发送邀请",
+      "given": "当前用户拥有成员管理权限",
+      "when": "输入有效邮箱并提交邀请",
+      "then": "系统提示邀请发送成功，并生成待接受邀请记录"
+    }
+  ]
 }
 ```
 
-## 事件结构
+## 待确认项
 
 ```json
 {
-  "event_id": "evt_001",
-  "task_id": "task_001",
-  "event_type": "prd_generated",
-  "actor": "pm_agent",
-  "input_summary": "用户输入团队邀请需求",
-  "output_summary": "生成 PRD 初稿",
-  "created_at": "2026-04-25T10:00:00Z"
+  "items": [
+    {
+      "type": "assumption",
+      "priority": "must",
+      "content": "邀请有效期暂定 7 天，需要业务确认。"
+    }
+  ]
 }
 ```
 
 ## 约束
 
-- API 不返回模型内部推理过程。
-- 模型字段使用路由别名，如 `reasoning-model`、`code-model`。
-- POC 阶段不提供公开外部 API Key。
+- 输出不包含模型内部推理过程。
+- 假设必须显式标记。
+- AC 必须可测试、可判断。
+- 技术实现字段不进入产品输出结构。

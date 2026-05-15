@@ -1,93 +1,98 @@
-# AGENTS.md - AI Native POC Project Guide
+# AGENTS.md - DevSmart 项目指南
 
-"文档驱动开发 (Doc-Driven Development)"：先锁定文档 -> 拆 `taskNNN` -> 实现与验证 -> 回写文档。
-
----
-
-## 0. 核心原则 (Core Principles)
-- **质量第一**：代码质量和系统安全不可妥协。
-- **文档为真**：需求、交互、接口只能来自 `docs/` 下的 `spec/plan/tech-refer/adr`。
-- **原子任务**：单次仅处理一个原子任务 `taskNNN`；必须说明验证方式。
-- **闭环回写**：实现完成必须回写 `task_*`、`change_*`，必要时更新 `spec_*`。
+DevSmart 当前定位为 AI 需求澄清与 PRD/AC 生成工作流工具。项目工作必须围绕“模糊需求 -> 澄清问题 -> PRD -> AC -> 待确认项 -> 评审输出”展开。
 
 ---
 
-## 1. 仓库结构 (Repository Structure)
-- **Codebase**:
-  - `backend/`: FastAPI + LangGraph 应用核心
-  - `frontend/`: React + Vite + TailwindCSS 任务控制台 (Mission Control)
-  - `.ai-context/`: Agent 运行时状态存储
-  - `prompts/`: 独立管理的 Prompt 文件
-- **Documentation**:
-  - `docs/`: 全局项目文档 (Implementation Plans, Specs)
-  - `.agent/`: 此 Agent 规则配置
-  - `.phrase/`: Phase 工作流文档 (按需启用)
+## 0. 核心原则
+
+- **中文优先**：沟通、注释和文档统一使用中文。
+- **文档为真**：产品范围以 `README.md`、`PRD.md` 和 `docs/` 为准。
+- **边界清晰**：不做代码生成、技术方案设计、接口设计、研发任务拆解或工程工具调度。
+- **质量第一**：PRD、AC 和待确认项必须可评审、可验收、可追溯。
+- **思考先行**：设计或编码前必须进行 Sequential-Thinking 分析。
+- **无迁移，直接替换**：POC 阶段发现旧叙事或旧结构时，默认直接清理并替换。
 
 ---
 
-## 2. Phase 工作流 (Workflow)
-1. **Phase Gate**: 在新 `phase-*` 目录创建最小集文档 (`plan`, `task`)。
-2. **In-Phase Loop**:
-   - 新需求 -> 更新 `plan` -> 拆 `taskNNN`。
-   - 实现 -> 执行任务 -> 验证。
-   - 问题 -> 记录 `issueNNN` -> 修复 -> 回写。
-3. **Task 闭环**:
-   - 标记 `taskNNN [x]`。
-   - 更新 `change_*` 记录变更。
+## 1. 仓库结构
+
+- `README.md`：项目入口。
+- `PRD.md`：产品单一事实源。
+- `docs/01-vision/`：愿景和 AI 原生需求工作流。
+- `docs/02-product/`：功能规格、用户画像、状态机、权限、指标。
+- `docs/03-architecture/`：实现边界、数据模型、输出结构、运行约束。
+- `prototype/`：历史原型素材和新 POC 流程说明。
+- `backend/`：POC 后端代码。
+- `frontend/`：POC 前端代码。
 
 ---
 
-## 3. 开发环境与构建 (Build & Dev)
+## 2. 产品工作流
 
-### Backend (Python)
-- **管理工具**: `uv` (必选)
-- **环境隔离**: `uv venv`
-- **依赖安装**: `uv sync`
-- **运行开发**: `uv run fastapi dev app/main.py`
-- **测试执行**: `uv run pytest`
-
-### Frontend (React)
-- **管理工具**: `pnpm` (必选)
-- **依赖安装**: `pnpm install`
-- **运行开发**: `pnpm dev`
-
----
-
-## 4. 编码规范 (Coding Standards)
-
-### Python (Backend)
-- **Typing**: 严格类型注解 (`TypedDict`, `Pydantic Models`)。
-- **Style**: 遵循 PEP8，使用 `ruff` 或 `black` 格式化。
-- **Structure**: 模块化 Agent Node 设计，分离 Logic 与 Prompt。
-
-### TypeScript/React (Frontend)
-- **Component**: Functional Components, Hooks 优先。
-- **Styling**: TailwindCSS Utility First。
-- **State**: 明确区分 UI State (Local) 与 Server Data (React Query/SWR)。
-- **Constants**: 避免硬编码，使用常量文件。
-
----
-
-## 5. 可视化架构 (Architecture)
-
-### Supervisor Mode Pattern
-```mermaid
-graph TD
-    User[Frontend User] -->|POST /tasks| API[FastAPI Backend]
-    API -->|Invoke| Supervisor[Supervisor Agent]
-    subgraph "Agent Graph"
-        Supervisor -->|Plan| PM[PM Agent]
-        Supervisor -->|Code| Coder[Coder Agent]
-        Coder -->|Interrupt| Human[Human Approval]
-        Human -->|Approve/Reject| Supervisor
-    end
-    PM -->|Plan Output| Supervisor
-    Coder -->|Code Output| Supervisor
+```text
+输入需求
+  -> 模糊度判断
+  -> 生成澄清问题
+  -> 用户补充
+  -> 生成 PRD
+  -> 生成 AC
+  -> 自动补漏
+  -> 汇总待确认项
+  -> 评审输出
 ```
 
 ---
 
-## 6. 提交与文档 (Commit & Docs)
-- **Git Commit**: 使用 Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`)。
-- **Task Association**: 提交信息尽量关联 `taskNNN`。
-- **Changelog**: 维护 `change_*` 文件，记录每次实质性变更。
+## 3. 开发环境与构建
+
+### Backend
+
+```bash
+bash scripts/dev-backend.sh
+```
+
+### Frontend
+
+```bash
+bash scripts/dev-frontend.sh
+```
+
+### Demo Data
+
+```bash
+bash scripts/mock-demo.sh
+```
+
+---
+
+## 4. 内容质量标准
+
+### PRD 必须包含
+
+- 背景与目标。
+- 目标用户。
+- 用户故事。
+- 功能范围。
+- 主流程。
+- 异常与边界场景。
+- 非目标。
+- 待确认问题。
+
+### AC 必须满足
+
+- 可测试。
+- 可判断。
+- 覆盖主流程、异常流程和边界场景。
+- 假设必须显式标记。
+
+---
+
+## 5. 禁止范围
+
+- 不生成代码。
+- 不设计技术方案。
+- 不设计 API 或数据库。
+- 不拆解研发任务。
+- 不调度外部工程工具。
+- 不自动触发 CI/CD。
